@@ -6,7 +6,7 @@ const mockApiCall = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
-        fontSize: "22px",
+        fontSize: "17px",
         fontFamily: "Georgia",
         color: "red",
       });
@@ -21,7 +21,6 @@ const useFetchFontStyles = () => {
     const fetchFontStyles = async () => {
       try {
         const response = await mockApiCall();
-        console.log("Fetched font styles:", response);
         dispatch(setFontStyles(response));
       } catch (error) {
         console.error("Failed to fetch font styles:", error);

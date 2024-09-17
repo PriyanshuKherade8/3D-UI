@@ -1,6 +1,9 @@
-import styled from "styled-components";
+import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import Box from "@mui/material/Box";
+import { themeKeys } from "../themeConfig";
+import { Typography } from "@mui/material";
 
 const StyledDiv = styled.div`
   font-size: ${({ fontSize }) => fontSize};
@@ -9,15 +12,17 @@ const StyledDiv = styled.div`
 `;
 
 const StyledBox = styled(Box)(({ fontSize, fontFamily, color }) => ({
-  fontSize: fontSize || "16px",
-  fontFamily: fontFamily || "Arial, sans-serif",
-  color: color || "black",
+  fontSize: fontSize,
+  fontFamily: fontFamily,
+  color: color,
 }));
 
 const ExampleComponent = () => {
-  const { fontSize, fontFamily, color } = useSelector(
-    (state) => state.fontStyles
-  );
+  const {
+    [themeKeys.FONT_SIZE]: fontSize,
+    [themeKeys.FONT_FAMILY]: fontFamily,
+    [themeKeys.COLOR]: color,
+  } = useSelector((state) => state.fontStyles);
 
   return (
     <>
@@ -27,6 +32,9 @@ const ExampleComponent = () => {
       <StyledBox fontSize={fontSize} fontFamily={fontFamily} color={color}>
         <p>This component uses dynamic font styles from Redux.</p>
       </StyledBox>
+      <Typography variant="h6" gutterBottom>
+        h6. Heading
+      </Typography>
     </>
   );
 };

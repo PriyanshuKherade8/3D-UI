@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultTheme } from "../themeConfig";
 
 const loadFontStylesFromLocalStorage = () => {
   const savedStyles = localStorage.getItem("fontStyles");
-  return savedStyles
-    ? JSON.parse(savedStyles)
-    : { fontSize: "16px", fontFamily: "Arial", color: "black" };
+  return savedStyles ? JSON.parse(savedStyles) : defaultTheme;
 };
 
 const saveFontStylesToLocalStorage = (fontStyles) => {
@@ -17,9 +16,8 @@ const fontStylesSlice = createSlice({
   reducers: {
     setFontStyles: (state, action) => {
       const newStyles = {
-        fontSize: action.payload.fontSize || "16px",
-        fontFamily: action.payload.fontFamily || "Arial",
-        color: action.payload.color || "black",
+        ...defaultTheme,
+        ...action.payload,
       };
       saveFontStylesToLocalStorage(newStyles);
       return newStyles;
