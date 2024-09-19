@@ -6,9 +6,19 @@ const mockApiCall = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
-        fontSize: "17px",
-        fontFamily: "Georgia",
-        color: "red",
+        components: {
+          Box: {
+            fontSize: "18px",
+            fontFamily: "Georgia, serif",
+            color: "orange",
+            backgroundColor: "red",
+          },
+
+          Card: {
+            fontSize: "30px",
+            fontFamily: "Times New Roman, serif",
+          },
+        },
       });
     }, 1000);
   });
