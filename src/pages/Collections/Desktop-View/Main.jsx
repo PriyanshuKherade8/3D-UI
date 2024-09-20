@@ -6,9 +6,74 @@ import {
   CardMedia,
   Paper,
   Typography,
+  IconButton,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
-//   <img src="https://i.ibb.co/NKZD0s8/image-4.jpg" />
+
+import RedoIcon from "@mui/icons-material/Redo";
+import UndoIcon from "@mui/icons-material/Undo";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import CachedIcon from "@mui/icons-material/Cached";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+
+const Toolbar = () => {
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        top: "50%",
+        left: "10px",
+        transform: "translateY(-50%)",
+        zIndex: 1000,
+      }}
+    >
+      <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
+        <IconButton>
+          <RedoIcon />
+        </IconButton>
+
+        <IconButton>
+          <UndoIcon />
+        </IconButton>
+
+        <IconButton>
+          <WidgetsIcon />
+        </IconButton>
+
+        <IconButton>
+          <CachedIcon />
+        </IconButton>
+      </Paper>
+    </Box>
+  );
+};
+
+const Configure = () => {
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        top: "92%",
+        left: "10px",
+        transform: "translateY(-50%)",
+        zIndex: 1000,
+      }}
+    >
+      <Paper elevation={3} sx={{ display: "flex", flexDirection: "row" }}>
+        <IconButton>
+          <FolderOutlinedIcon />
+        </IconButton>
+
+        <IconButton>
+          <FolderOpenOutlinedIcon />
+        </IconButton>
+      </Paper>
+    </Box>
+  );
+};
+
 const ItemCard = ({ image, title, isSelected, onClick }) => (
   <Card elevation={0} onClick={onClick} style={{ marginBottom: "10px" }}>
     <CardActionArea>
@@ -22,6 +87,7 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
           border: isSelected ? "1px solid #007AFF" : "none",
           height: "164px",
           width: "164px",
+          objectFit: "cover",
         }}
       />
       <CardContent
@@ -69,11 +135,33 @@ const Main = () => {
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
-      <Box style={{ width: "84%", border: "1px solid grey" }}>
-        {"left screen"}
+      {/* Left screen with image */}
+      <Box style={{ width: "84%" }}>
+        <img
+          src="https://i.ibb.co/NKZD0s8/image-4.jpg"
+          alt="Left Screen"
+          style={{
+            width: "100%",
+            height: "90%",
+            objectFit: "contain",
+          }}
+        />
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginRight: "10px",
+          }}
+        >
+          <Button variant="contained" size="small">
+            Contained
+          </Button>
+        </Box>
       </Box>
+
+      {/* Right side with cards */}
       <Box style={{ width: "16%", paddingTop: "4px" }}>
-        <Paper elevation={3} style={{ padding: "10px", marginBottom: "5px" }}>
+        <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
           {"Bags"}
         </Paper>
         <Paper
@@ -99,6 +187,8 @@ const Main = () => {
           </Box>
         </Paper>
       </Box>
+      <Configure />
+      <Toolbar />
     </Paper>
   );
 };
