@@ -50,30 +50,6 @@ const Toolbar = () => {
   );
 };
 
-const Configure = () => {
-  return (
-    <Box
-      sx={{
-        position: "fixed",
-        top: "92%",
-        left: "10px",
-        transform: "translateY(-50%)",
-        zIndex: 1000,
-      }}
-    >
-      <Paper elevation={3} sx={{ display: "flex", flexDirection: "row" }}>
-        <IconButton>
-          <FolderOutlinedIcon />
-        </IconButton>
-
-        <IconButton>
-          <FolderOpenOutlinedIcon />
-        </IconButton>
-      </Paper>
-    </Box>
-  );
-};
-
 const ItemCard = ({ image, title, isSelected, onClick }) => (
   <Card elevation={0} onClick={onClick} style={{ marginBottom: "10px" }}>
     <CardActionArea>
@@ -113,7 +89,7 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
 );
 
 const Main = () => {
-  const cardItems = [
+  const initialCardItems = [
     {
       image:
         "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
@@ -131,12 +107,36 @@ const Main = () => {
     },
   ];
 
+  const allProducts = [
+    ...initialCardItems,
+    {
+      image:
+        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
+      title: "Item Title4",
+    },
+    {
+      image:
+        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
+      title: "Item Title5",
+    },
+    {
+      image:
+        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
+      title: "Item Title6",
+    },
+  ];
+
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowAllProducts((prev) => !prev);
+  };
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
       {/* Left screen with image */}
-      <Box style={{ width: "84%" }}>
+      <Box style={{ width: showAllProducts ? "65%" : "84%" }}>
         <img
           src="https://i.ibb.co/NKZD0s8/image-4.jpg"
           alt="Left Screen"
@@ -150,28 +150,37 @@ const Main = () => {
           <Box
             style={{
               display: "flex",
+              justifyContent: "space-between",
               padding: "5px",
             }}
           >
             <Button variant="contained" size="small">
-              icon
+              {"Controls"}
             </Button>
           </Box>
           <Box
             style={{
               display: "flex",
+              justifyContent: "space-between",
               padding: "5px",
             }}
           >
-            <Button variant="contained" size="small">
-              Contained
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleButtonClick}
+            >
+              {/* {showAllProducts ? "Configure" : "View All Products"} */}
+              {showAllProducts ? "View All Products" : "Configure"}
             </Button>
           </Box>
         </Box>
       </Box>
 
       {/* Right side with cards */}
-      <Box style={{ width: "16%", paddingTop: "4px" }}>
+      <Box
+        style={{ width: showAllProducts ? "35%" : "16%", paddingTop: "4px" }}
+      >
         <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
           {"Bags"}
         </Paper>
@@ -186,19 +195,21 @@ const Main = () => {
           }}
         >
           <Box>
-            {cardItems.map((item, index) => (
-              <ItemCard
-                key={index}
-                image={item.image}
-                title={item.title}
-                isSelected={selectedIndex === index}
-                onClick={() => setSelectedIndex(index)}
-              />
-            ))}
+            {(showAllProducts ? allProducts : initialCardItems).map(
+              (item, index) => (
+                <ItemCard
+                  key={index}
+                  image={item.image}
+                  title={item.title}
+                  isSelected={selectedIndex === index}
+                  onClick={() => setSelectedIndex(index)}
+                />
+              )
+            )}
           </Box>
         </Paper>
       </Box>
-      {/* <Configure /> */}
+
       <Toolbar />
     </Paper>
   );
