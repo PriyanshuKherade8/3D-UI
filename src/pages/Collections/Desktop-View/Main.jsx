@@ -146,16 +146,27 @@ const Main = () => {
             objectFit: "contain",
           }}
         />
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginRight: "10px",
-          }}
-        >
-          <Button variant="contained" size="small">
-            Contained
-          </Button>
+        <Box style={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            style={{
+              display: "flex",
+              padding: "5px",
+            }}
+          >
+            <Button variant="contained" size="small">
+              icon
+            </Button>
+          </Box>
+          <Box
+            style={{
+              display: "flex",
+              padding: "5px",
+            }}
+          >
+            <Button variant="contained" size="small">
+              Contained
+            </Button>
+          </Box>
         </Box>
       </Box>
 
@@ -187,7 +198,7 @@ const Main = () => {
           </Box>
         </Paper>
       </Box>
-      <Configure />
+      {/* <Configure /> */}
       <Toolbar />
     </Paper>
   );
