@@ -27,25 +27,41 @@ const Toolbar = () => {
         left: "10px",
         transform: "translateY(-50%)",
         zIndex: 1000,
+        gap: "10px",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
-        <IconButton>
-          <RedoIcon />
-        </IconButton>
+      <Box>
+        <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
+          <IconButton>
+            <RedoIcon />
+          </IconButton>
 
-        <IconButton>
-          <UndoIcon />
-        </IconButton>
+          <IconButton>
+            <UndoIcon />
+          </IconButton>
+        </Paper>
+      </Box>
+      <Box>
+        <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
+          <IconButton>
+            <RedoIcon />
+          </IconButton>
 
-        <IconButton>
-          <WidgetsIcon />
-        </IconButton>
+          <IconButton>
+            <UndoIcon />
+          </IconButton>
 
-        <IconButton>
-          <CachedIcon />
-        </IconButton>
-      </Paper>
+          <IconButton>
+            <WidgetsIcon />
+          </IconButton>
+
+          <IconButton>
+            <CachedIcon />
+          </IconButton>
+        </Paper>
+      </Box>
     </Box>
   );
 };
