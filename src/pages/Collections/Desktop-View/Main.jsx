@@ -10,13 +10,13 @@ import {
   Button,
 } from "@mui/material";
 import React, { useState } from "react";
-
 import RedoIcon from "@mui/icons-material/Redo";
 import UndoIcon from "@mui/icons-material/Undo";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import CachedIcon from "@mui/icons-material/Cached";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import MainPage from "./MainPage";
 
 const Toolbar = () => {
   return (
@@ -219,8 +219,8 @@ const Main = () => {
           }}
         >
           <Box>
-            {(showAllProducts ? allProducts : initialCardItems).map(
-              (item, index) => (
+            {!showAllProducts &&
+              initialCardItems.map((item, index) => (
                 <ItemCard
                   key={index}
                   image={item.image}
@@ -228,8 +228,8 @@ const Main = () => {
                   isSelected={selectedIndex === index}
                   onClick={() => setSelectedIndex(index)}
                 />
-              )
-            )}
+              ))}
+            {showAllProducts && <MainPage />}
           </Box>
         </Paper>
       </Box>
