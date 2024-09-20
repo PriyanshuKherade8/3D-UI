@@ -136,7 +136,12 @@ const Main = () => {
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
       {/* Left screen with image */}
-      <Box style={{ width: showAllProducts ? "65%" : "84%" }}>
+      <Box
+        style={{
+          width: showAllProducts ? "65%" : "84%",
+          transition: "width 0.5s ease",
+        }}
+      >
         <img
           src="https://i.ibb.co/NKZD0s8/image-4.jpg"
           alt="Left Screen"
@@ -170,7 +175,6 @@ const Main = () => {
               size="small"
               onClick={handleButtonClick}
             >
-              {/* {showAllProducts ? "Configure" : "View All Products"} */}
               {showAllProducts ? "View All Products" : "Configure"}
             </Button>
           </Box>
@@ -179,7 +183,11 @@ const Main = () => {
 
       {/* Right side with cards */}
       <Box
-        style={{ width: showAllProducts ? "35%" : "16%", paddingTop: "4px" }}
+        style={{
+          width: showAllProducts ? "35%" : "16%",
+          paddingTop: "4px",
+          transition: "width 0.5s ease",
+        }}
       >
         <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
           {showAllProducts ? "Products" : "Bags"}
