@@ -182,7 +182,7 @@ const Main = () => {
         style={{ width: showAllProducts ? "35%" : "16%", paddingTop: "4px" }}
       >
         <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
-          {"Bags"}
+          {showAllProducts ? "Products" : "Bags"}
         </Paper>
         <Paper
           elevation={3}
@@ -191,7 +191,7 @@ const Main = () => {
             height: "89vh",
             overflowY: "scroll",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: showAllProducts ? "" : "center",
           }}
         >
           <Box>
