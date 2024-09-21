@@ -67,8 +67,20 @@ const Toolbar = () => {
 };
 
 const ItemCard = ({ image, title, isSelected, onClick }) => (
-  <Card elevation={0} onClick={onClick} style={{ marginBottom: "10px" }}>
-    <CardActionArea>
+  <Card
+    elevation={0}
+    onClick={onClick}
+    style={{
+      marginBottom: "10px",
+    }}
+  >
+    <CardActionArea
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
       <CardMedia
         component="img"
         height="170"
@@ -215,10 +227,17 @@ const Main = () => {
             height: "89vh",
             overflowY: "scroll",
             display: "flex",
-            justifyContent: showAllProducts ? "" : "center",
+            // justifyContent: showAllProducts ? "" : "center",
+            // alignItems: "center",
+            // border: "1px solid red",
+            // justifyContent: "center",
           }}
         >
-          <Box>
+          <Box
+            style={{
+              width: "100%",
+            }}
+          >
             {!showAllProducts &&
               initialCardItems.map((item, index) => (
                 <ItemCard

@@ -1,5 +1,6 @@
 import React from "react";
 import ExpandableGrid from "../../../components/ExpandableGrid";
+import { Box } from "@mui/material";
 
 // Sample data for items
 const itemsData = [
@@ -35,7 +36,7 @@ const itemsData = [
 
 const MainPage = () => {
   return (
-    <div>
+    <Box>
       {/* Example 1: Base Section */}
       <ExpandableGrid
         title="Base"
@@ -51,7 +52,7 @@ const MainPage = () => {
         itemPerRow={4}
         totalRows={1}
       />
-    </div>
+    </Box>
   );
 };
 
