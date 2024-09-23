@@ -8,14 +8,13 @@ import {
   Typography,
   IconButton,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
 import RedoIcon from "@mui/icons-material/Redo";
 import UndoIcon from "@mui/icons-material/Undo";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import CachedIcon from "@mui/icons-material/Cached";
-import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MainPage from "./MainPage";
 
 const Toolbar = () => {
@@ -37,7 +36,6 @@ const Toolbar = () => {
           <IconButton>
             <RedoIcon />
           </IconButton>
-
           <IconButton>
             <UndoIcon />
           </IconButton>
@@ -48,15 +46,12 @@ const Toolbar = () => {
           <IconButton>
             <RedoIcon />
           </IconButton>
-
           <IconButton>
             <UndoIcon />
           </IconButton>
-
           <IconButton>
             <WidgetsIcon />
           </IconButton>
-
           <IconButton>
             <CachedIcon />
           </IconButton>
@@ -160,13 +155,22 @@ const Main = () => {
   const handleButtonClick = () => {
     setShowAllProducts((prev) => !prev);
   };
+  console.log("showAllProducts", showAllProducts);
+
+  const isTablet = useMediaQuery("(max-width:960px)");
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
       {/* Left screen with image */}
       <Box
         style={{
-          width: showAllProducts ? "65%" : "84%",
+          width: showAllProducts
+            ? isTablet
+              ? "60%"
+              : "65%"
+            : isTablet
+            ? "75%"
+            : "84%", // Responsive width
           transition: "width 0.5s ease",
         }}
       >
@@ -187,9 +191,11 @@ const Main = () => {
               padding: "5px",
             }}
           >
-            <Button variant="contained" size="small">
-              {"Controls"}
-            </Button>
+            {showAllProducts && (
+              <Button variant="contained" size="small">
+                {"Controls"}
+              </Button>
+            )}
           </Box>
           <Box
             style={{
@@ -212,9 +218,16 @@ const Main = () => {
       {/* Right side with cards */}
       <Box
         style={{
-          width: showAllProducts ? "35%" : "16%",
+          width: showAllProducts
+            ? isTablet
+              ? "40%"
+              : "35%"
+            : isTablet
+            ? "25%"
+            : "16%", // Responsive width
           paddingTop: "4px",
           transition: "width 0.5s ease",
+          border: "1px solid red",
         }}
       >
         <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
@@ -227,17 +240,9 @@ const Main = () => {
             height: "89vh",
             overflowY: "scroll",
             display: "flex",
-            // justifyContent: showAllProducts ? "" : "center",
-            // alignItems: "center",
-            // border: "1px solid red",
-            // justifyContent: "center",
           }}
         >
-          <Box
-            style={{
-              width: "100%",
-            }}
-          >
+          <Box style={{ width: "100%" }}>
             {!showAllProducts &&
               initialCardItems.map((item, index) => (
                 <ItemCard

@@ -51,6 +51,14 @@ const MainPage = () => {
         items={itemsData}
         itemPerRow={4}
         totalRows={1}
+        displayImage={"circle"}
+      />
+
+      <ExpandableGrid
+        title="Handle chain"
+        items={itemsData}
+        itemPerRow={3}
+        totalRows={1}
       />
     </Box>
   );
