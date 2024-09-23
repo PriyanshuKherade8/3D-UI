@@ -17,7 +17,6 @@ import WidgetsIcon from "@mui/icons-material/Widgets";
 import CachedIcon from "@mui/icons-material/Cached";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-
 import MainPage from "./MainPage";
 
 const Toolbar = () => {
@@ -168,7 +167,6 @@ const Main = () => {
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
-      {/* Left screen with image */}
       <Box
         style={{
           width: showNewPaper
@@ -179,7 +177,7 @@ const Main = () => {
               : "65%"
             : isTablet
             ? "75%"
-            : "84%", // Responsive width
+            : "84%",
           transition: "width 0.5s ease",
         }}
       >
@@ -202,7 +200,7 @@ const Main = () => {
           >
             {showAllProducts && (
               <Button variant="contained" size="small">
-                {"Controls"}
+                Controls
               </Button>
             )}
           </Box>
@@ -250,47 +248,53 @@ const Main = () => {
               height: "89vh",
               overflowY: "scroll",
               display: "flex",
+              flexDirection: "column",
             }}
           >
             <Box style={{ width: "100%" }}>
-              {!showAllProducts &&
-                initialCardItems.map((item, index) => (
-                  <ItemCard
-                    key={index}
-                    image={item.image}
-                    title={item.title}
-                    isSelected={selectedIndex === index}
-                    onClick={() => setSelectedIndex(index)}
-                  />
-                ))}
+              {!showAllProducts && (
+                <>
+                  {initialCardItems.map((item, index) => (
+                    <ItemCard
+                      key={index}
+                      image={item.image}
+                      title={item.title}
+                      isSelected={selectedIndex === index}
+                      onClick={() => setSelectedIndex(index)}
+                    />
+                  ))}
+                </>
+              )}
               {showAllProducts && <MainPage />}
             </Box>
           </Paper>
 
           {/* Add Icon to the right side of the box */}
-          <Box
-            sx={{
-              position: "absolute",
-              top: "15%",
-              left: "-20px",
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              backgroundColor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-              cursor: "pointer",
-            }}
-            onClick={handleIconClick}
-          >
-            <ArrowForwardIosOutlinedIcon
+          {showAllProducts && (
+            <Box
               sx={{
-                fontSize: "20px",
+                position: "absolute",
+                top: "15%",
+                left: "-20px",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                backgroundColor: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+                cursor: "pointer",
               }}
-            />
-          </Box>
+              onClick={handleIconClick}
+            >
+              <ArrowForwardIosOutlinedIcon
+                sx={{
+                  fontSize: "20px",
+                }}
+              />
+            </Box>
+          )}
         </Box>
       )}
 
@@ -329,7 +333,7 @@ const Main = () => {
                 }}
                 onClick={() => {
                   setShowNewPaper(false);
-                  setShowAllProducts(false);
+                  setShowAllProducts(true);
                 }}
               />
             </Box>
