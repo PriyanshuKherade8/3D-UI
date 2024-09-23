@@ -152,15 +152,16 @@ const Main = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showAllProducts, setShowAllProducts] = useState(false);
+
   const [showNewPaper, setShowNewPaper] = useState(false);
 
   const handleButtonClick = () => {
     setShowAllProducts((prev) => !prev);
+    setShowNewPaper(false);
   };
 
   const handleIconClick = () => {
     setShowNewPaper(true);
-    setShowAllProducts(false);
   };
 
   const isTablet = useMediaQuery("(max-width:960px)");
