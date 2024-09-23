@@ -40,7 +40,6 @@ const ExpandableGrid = ({
           overflow: "hidden",
           transition: "max-height 0.5s ease-in-out",
           maxHeight: expanded ? "1000px" : "250px",
-          border: "1px solid green",
         }}
       >
         <Grid container spacing={2} justifyContent="flex-start">
@@ -52,7 +51,14 @@ const ExpandableGrid = ({
               key={index}
               sx={{ display: "flex", justifyContent: "center" }}
             >
-              <Card sx={{ height: 146, border: "1px solid red", width: 146 }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  height: 146,
+                  width: 146,
+                  marginBottom: "1px",
+                }}
+              >
                 {/* Fixed card height */}
                 <CardActionArea>
                   <CardMedia

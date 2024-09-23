@@ -15,6 +15,10 @@ import RedoIcon from "@mui/icons-material/Redo";
 import UndoIcon from "@mui/icons-material/Undo";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import CachedIcon from "@mui/icons-material/Cached";
+
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+
 import MainPage from "./MainPage";
 
 const Toolbar = () => {
@@ -155,7 +159,6 @@ const Main = () => {
   const handleButtonClick = () => {
     setShowAllProducts((prev) => !prev);
   };
-  console.log("showAllProducts", showAllProducts);
 
   const isTablet = useMediaQuery("(max-width:960px)");
 
@@ -227,7 +230,7 @@ const Main = () => {
             : "16%", // Responsive width
           paddingTop: "4px",
           transition: "width 0.5s ease",
-          border: "1px solid red",
+          position: "relative",
         }}
       >
         <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
@@ -256,6 +259,29 @@ const Main = () => {
             {showAllProducts && <MainPage />}
           </Box>
         </Paper>
+
+        {/* Add Icon to the right side of the box */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: "15%",
+            left: "-20px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            backgroundColor: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+          }}
+        >
+          <ArrowForwardIosOutlinedIcon
+            sx={{
+              fontSize: "20px",
+            }}
+          />
+        </Box>
       </Box>
 
       <Toolbar />
