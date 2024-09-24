@@ -18,8 +18,52 @@ import CachedIcon from "@mui/icons-material/Cached";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import MainPage from "./MainPage";
+import IframeResizer from "@iframe-resizer/react";
+import { useGetExperienceDataById, useSetActionCall } from "../services";
 
-const Toolbar = () => {
+const Toolbar = ({
+  rotate,
+  setRotate,
+  sessionId,
+  sendRotateCall,
+  controlId,
+}) => {
+  console.log("rotate", rotate);
+  // const handleRotate = () => {
+  //   const newRotateValue = !rotate;
+  //   setRotate(newRotateValue);
+
+  //   const payload = {
+  //     session_id: sessionId,
+  //     message: {
+  //       type: "control",
+  //       message: { control_id: controlId, value: newRotateValue.toString() },
+  //     },
+  //   };
+
+  //   console.log("payload", payload);
+  //   sendRotateCall(payload);
+  // };
+
+  const handleRotate = () => {
+    setRotate((prev) => {
+      const newRotateValue = !prev;
+
+      const payload = {
+        session_id: sessionId,
+        message: {
+          type: "control",
+          message: { control_id: controlId, value: newRotateValue.toString() },
+        },
+      };
+
+      console.log("payload", payload);
+      sendRotateCall(payload);
+
+      return newRotateValue;
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -36,7 +80,7 @@ const Toolbar = () => {
       <Box>
         <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
           <IconButton>
-            <RedoIcon />
+            <RedoIcon onClick={handleRotate} />
           </IconButton>
           <IconButton>
             <UndoIcon />
@@ -113,6 +157,7 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
 );
 
 const Main = () => {
+  const [rotate, setRotate] = useState(false);
   const initialCardItems = [
     {
       image:
@@ -163,9 +208,20 @@ const Main = () => {
   const handleIconClick = () => {
     setShowNewPaper(true);
   };
+  const { data } = useGetExperienceDataById();
+  const getData = data?.data;
+
+  const experienceId = getData?.experience?.experience_id;
+  const productKey = getData?.experience?.products[0]?.product_key;
+  const sessionId = getData?.sessionID;
 
   const isTablet = useMediaQuery("(max-width:960px)");
+  const canvasUrl = "http://64.227.170.212";
+  const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
+  console.log("url", url);
 
+  const { mutate: sendRotateCall } = useSetActionCall();
+  const controlId = getData?.experience?.controls?.[0]?.control_id;
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
       <Box
@@ -182,7 +238,7 @@ const Main = () => {
           transition: "width 0.5s ease",
         }}
       >
-        <img
+        {/* <img
           src="https://i.ibb.co/NKZD0s8/image-4.jpg"
           alt="Left Screen"
           style={{
@@ -190,7 +246,16 @@ const Main = () => {
             height: "90%",
             objectFit: "contain",
           }}
-        />
+        /> */}
+        <Box style={{ height: "90vh" }}>
+          <IframeResizer
+            id="one"
+            src={url}
+            scrolling="no"
+            height="100%"
+            width="100%"
+          />
+        </Box>
         <Box style={{ display: "flex", justifyContent: "space-between" }}>
           <Box
             style={{
@@ -342,7 +407,13 @@ const Main = () => {
         </Box>
       )}
 
-      <Toolbar />
+      <Toolbar
+        rotate={rotate}
+        setRotate={setRotate}
+        controlId={controlId}
+        sessionId={sessionId}
+        sendRotateCall={sendRotateCall}
+      />
     </Paper>
   );
 };
