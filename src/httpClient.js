@@ -8,3 +8,17 @@ const httpClient = axios.create({
 });
 
 export default httpClient;
+
+export const httpClientForIframe = axios.create({
+  baseURL: "http://143.110.186.134/api/collection",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const backendClient = axios.create({
+  baseURL: "http://143.110.186.134/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
