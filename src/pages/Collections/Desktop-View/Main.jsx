@@ -10,7 +10,7 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RedoIcon from "@mui/icons-material/Redo";
 import UndoIcon from "@mui/icons-material/Undo";
 import WidgetsIcon from "@mui/icons-material/Widgets";
@@ -20,6 +20,8 @@ import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutl
 import MainPage from "./MainPage";
 import IframeResizer from "@iframe-resizer/react";
 import { useGetExperienceDataById, useSetActionCall } from "../services";
+import io from "socket.io-client";
+import useSocket from "../../../hooks/useSocketMessages";
 
 const Toolbar = ({
   rotate,
@@ -219,9 +221,25 @@ const Main = () => {
   const canvasUrl = "http://64.227.170.212";
   const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
   console.log("url", url);
+  const URL = "http://143.110.186.134";
+  const socket = io(URL, { autoConnect: false });
+  console.log("socket", socket);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const { currProductKey, chapterList, currPlayMode, currActId, currItemId } =
+    useSocket(socket);
 
   const { mutate: sendRotateCall } = useSetActionCall();
   const controlId = getData?.experience?.controls?.[0]?.control_id;
+
+  useEffect(() => {
+    if (!isSocketConnected && sessionId) {
+      console.log("sessionId on canvas", sessionId);
+      socket.auth = { sessionId };
+      socket.connect();
+      setIsSocketConnected(true);
+    }
+  }, [sessionId]);
+
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
       <Box
