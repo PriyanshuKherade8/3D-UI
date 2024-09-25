@@ -9,6 +9,7 @@ import {
   IconButton,
   Button,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import RedoIcon from "@mui/icons-material/Redo";
@@ -98,6 +99,67 @@ const Toolbar = ({
   );
 };
 
+const Views = ({ viewActionData, sessionId, collectionActionData }) => {
+  console.log("viewActionData", viewActionData, collectionActionData);
+
+  const { mutate: changeViewCall } = useSetProductChangeCall();
+
+  const handleViewChange = (view) => {
+    const item = collectionActionData?.items?.[0];
+
+    if (!item) {
+      console.error("No item found in collectionActionData");
+      return;
+    }
+
+    const viewPayload = {
+      session_id: sessionId,
+      message: {
+        type: "change_view",
+        message: {
+          item_id: item.item_id,
+          product_key: item.product.product_key,
+          view_id: view.view_id,
+        },
+      },
+    };
+
+    console.log("Generated viewPayload:", viewPayload);
+
+    changeViewCall(viewPayload);
+  };
+
+  return (
+    <Box>
+      <Box>
+        <Paper elevation={3} sx={{ display: "flex", flexDirection: "row" }}>
+          {/* Map through viewActionData to display the icons */}
+          {viewActionData?.map((view) => {
+            // Find the icon with file_type "L"
+            const largeIcon = view.view_icons.find(
+              (icon) => icon.file_type === "L"
+            );
+            return (
+              <Tooltip
+                key={view.view_id}
+                title={view.view_name || view.bag_name}
+              >
+                <IconButton onClick={() => handleViewChange(view)}>
+                  <img
+                    src={largeIcon.path}
+                    alt={view.view_name || view.bag_name}
+                    style={{ width: 30, height: 30 }}
+                  />
+                </IconButton>
+              </Tooltip>
+            );
+          })}
+        </Paper>
+      </Box>
+    </Box>
+  );
+};
+
 const ItemCard = ({ image, title, isSelected, onClick }) => (
   <Card
     elevation={0}
@@ -165,7 +227,10 @@ const Main = () => {
   };
 
   const { data } = useGetExperienceDataById();
-  console.log("itemData", data?.data);
+  console.log("allData", data?.data);
+  const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
+  const collectionActionData = data?.data?.experience?.collection;
+
   const productList = data?.data?.experience?.collection?.items;
   console.log("productList", productList);
 
@@ -204,6 +269,7 @@ const Main = () => {
 
   const { mutate: sendRotateCall } = useSetActionCall();
   const { mutate: changeProductCall } = useSetProductChangeCall();
+
   const controlId = getData?.experience?.controls?.[0]?.control_id;
 
   useEffect(() => {
@@ -270,9 +336,11 @@ const Main = () => {
             }}
           >
             {showAllProducts && (
-              <Button variant="contained" size="small">
-                Controls
-              </Button>
+              <Views
+                viewActionData={viewActionData}
+                sessionId={sessionId}
+                collectionActionData={collectionActionData}
+              />
             )}
           </Box>
           <Box
