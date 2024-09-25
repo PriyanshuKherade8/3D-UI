@@ -1,65 +1,57 @@
 import React from "react";
 import ExpandableGrid from "../../../components/ExpandableGrid";
 import { Box } from "@mui/material";
+import { useSetActionCall } from "../services";
 
-// Sample data for items
-const itemsData = [
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title1",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title2",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title3",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title4",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title5",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title6",
-  },
-  {
-    image: "https://via.placeholder.com/100",
-    title: "Item Title7",
-  },
-];
+const MainPage = ({ selectedItem, sessionId }) => {
+  const propertySection = selectedItem?.[0]?.product?.property || [];
 
-const MainPage = () => {
+  const { mutate: variantChange } = useSetActionCall();
+
+  const propertyId = selectedItem?.[0]?.product?.property?.[0]?.property_id;
+  const productKey = selectedItem?.[0]?.product?.product_key;
+
+  const handleVariantChange = (propertyId, variant) => {
+    const payload = {
+      session_id: sessionId,
+      message: {
+        type: "change_variant",
+        message: {
+          product_key: productKey,
+          property_id: propertyId,
+          variant_id: variant.variant_id,
+        },
+      },
+    };
+
+    variantChange(payload);
+  };
+
   return (
     <Box>
-      {/* Example 1: Base Section */}
-      <ExpandableGrid
-        title="Base"
-        items={itemsData}
-        itemPerRow={3}
-        totalRows={1}
-      />
+      {propertySection.map((property) => {
+        const itemsData = property.variants.map((variant) => ({
+          image:
+            variant.variant_icons.find((icon) => icon.file_type === "L")
+              ?.path || "",
+          title: variant.variant_name,
+          variant,
+        }));
 
-      {/* Example 2: Material Section */}
-      <ExpandableGrid
-        title="Material"
-        items={itemsData}
-        itemPerRow={4}
-        totalRows={1}
-        displayImage={"circle"}
-      />
-
-      <ExpandableGrid
-        title="Handle chain"
-        items={itemsData}
-        itemPerRow={3}
-        totalRows={1}
-      />
+        return (
+          <ExpandableGrid
+            key={property.property_id}
+            title={property.property_name}
+            items={itemsData}
+            itemPerRow={3}
+            totalRows={1}
+            displayImage={"circle"}
+            onItemSelect={(selectedVariant) =>
+              handleVariantChange(property.property_id, selectedVariant)
+            }
+          />
+        );
+      })}
     </Box>
   );
 };

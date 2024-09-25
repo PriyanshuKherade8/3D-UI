@@ -18,6 +18,7 @@ const ExpandableGrid = ({
   itemPerRow = 4,
   totalRows = 1,
   displayImage = "square",
+  onItemSelect,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -59,8 +60,7 @@ const ExpandableGrid = ({
                   marginBottom: "1px",
                 }}
               >
-                {/* Fixed card height */}
-                <CardActionArea>
+                <CardActionArea onClick={() => onItemSelect(item.variant)}>
                   <CardMedia
                     component="img"
                     height="90"

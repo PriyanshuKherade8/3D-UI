@@ -19,7 +19,11 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import MainPage from "./MainPage";
 import IframeResizer from "@iframe-resizer/react";
-import { useGetExperienceDataById, useSetActionCall } from "../services";
+import {
+  useGetExperienceDataById,
+  useSetActionCall,
+  useSetProductChangeCall,
+} from "../services";
 import io from "socket.io-client";
 import useSocket from "../../../hooks/useSocketMessages";
 
@@ -31,21 +35,6 @@ const Toolbar = ({
   controlId,
 }) => {
   console.log("rotate", rotate);
-  // const handleRotate = () => {
-  //   const newRotateValue = !rotate;
-  //   setRotate(newRotateValue);
-
-  //   const payload = {
-  //     session_id: sessionId,
-  //     message: {
-  //       type: "control",
-  //       message: { control_id: controlId, value: newRotateValue.toString() },
-  //     },
-  //   };
-
-  //   console.log("payload", payload);
-  //   sendRotateCall(payload);
-  // };
 
   const handleRotate = () => {
     setRotate((prev) => {
@@ -160,23 +149,6 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
 
 const Main = () => {
   const [rotate, setRotate] = useState(false);
-  const initialCardItems = [
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title1",
-    },
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title2",
-    },
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title3",
-    },
-  ];
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showAllProducts, setShowAllProducts] = useState(false);
@@ -191,7 +163,28 @@ const Main = () => {
   const handleIconClick = () => {
     setShowNewPaper(true);
   };
+
   const { data } = useGetExperienceDataById();
+  console.log("itemData", data?.data);
+  const productList = data?.data?.experience?.collection?.items;
+  console.log("productList", productList);
+
+  const initialCardItems = productList?.map((product) => {
+    console.log("bb", product);
+    const image = product.item_icons.find(
+      (icon) => icon.file_type === "L"
+    )?.path;
+    return {
+      image: image || "",
+      title: product.item_display_short_title || "Untitled",
+      product_id: product?.product?.product_id,
+      product: product?.product,
+      item_id: product?.item_id,
+    };
+  });
+
+  console.log("initialCardItems", initialCardItems);
+
   const getData = data?.data;
 
   const experienceId = getData?.experience?.experience_id;
@@ -210,6 +203,7 @@ const Main = () => {
     useSocket(socket);
 
   const { mutate: sendRotateCall } = useSetActionCall();
+  const { mutate: changeProductCall } = useSetProductChangeCall();
   const controlId = getData?.experience?.controls?.[0]?.control_id;
 
   useEffect(() => {
@@ -220,6 +214,23 @@ const Main = () => {
       setIsSocketConnected(true);
     }
   }, [sessionId]);
+
+  const selectedItem =
+    selectedIndex !== null ? [initialCardItems[selectedIndex]] : [];
+
+  const payloadForItemChange = {
+    session_id: sessionId,
+    message: {
+      type: "change_item",
+      message: { item_id: selectedItem?.[0]?.item_id },
+    },
+  };
+
+  useEffect(() => {
+    if (selectedItem.length > 0) {
+      changeProductCall(payloadForItemChange);
+    }
+  }, [selectedIndex]);
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
@@ -314,18 +325,23 @@ const Main = () => {
             <Box sx={{ width: "100%" }}>
               {!showAllProducts && (
                 <>
-                  {initialCardItems.map((item, index) => (
+                  {initialCardItems?.map((item, index) => (
                     <ItemCard
                       key={index}
                       image={item.image}
                       title={item.title}
                       isSelected={selectedIndex === index}
-                      onClick={() => setSelectedIndex(index)}
+                      onClick={() => {
+                        setSelectedIndex(index);
+                        setShowAllProducts((prev) => !prev);
+                      }}
                     />
                   ))}
                 </>
               )}
-              {showAllProducts && <MainPage />}
+              {showAllProducts && (
+                <MainPage selectedItem={selectedItem} sessionId={sessionId} />
+              )}
             </Box>
           </Paper>
 
