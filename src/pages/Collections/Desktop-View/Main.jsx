@@ -178,25 +178,6 @@ const Main = () => {
     },
   ];
 
-  const allProducts = [
-    ...initialCardItems,
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title4",
-    },
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title5",
-    },
-    {
-      image:
-        "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back07.jpg",
-      title: "Item Title6",
-    },
-  ];
-
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showAllProducts, setShowAllProducts] = useState(false);
 
@@ -242,8 +223,9 @@ const Main = () => {
 
   return (
     <Paper elevation={0} style={{ display: "flex", height: "100vh" }}>
+      {/* Left side */}
       <Box
-        style={{
+        sx={{
           width: showNewPaper
             ? "97%"
             : showAllProducts
@@ -253,19 +235,13 @@ const Main = () => {
             : isTablet
             ? "75%"
             : "84%",
+          height: "100vh", // Ensure full height
           transition: "width 0.5s ease",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {/* <img
-          src="https://i.ibb.co/NKZD0s8/image-4.jpg"
-          alt="Left Screen"
-          style={{
-            width: "100%",
-            height: "90%",
-            objectFit: "contain",
-          }}
-        /> */}
-        <Box style={{ height: "90vh" }}>
+        <Box sx={{ flex: 1 }}>
           <IframeResizer
             id="one"
             src={url}
@@ -306,10 +282,10 @@ const Main = () => {
         </Box>
       </Box>
 
-      {/* Right side with cards */}
+      {/* Right side */}
       {!showNewPaper && (
         <Box
-          style={{
+          sx={{
             width: showAllProducts
               ? isTablet
                 ? "40%"
@@ -317,9 +293,11 @@ const Main = () => {
               : isTablet
               ? "25%"
               : "16%",
-            paddingTop: "4px",
+            height: "100vh", // Ensure full height
             transition: "width 0.5s ease",
             position: "relative",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
@@ -327,15 +305,13 @@ const Main = () => {
           </Paper>
           <Paper
             elevation={3}
-            style={{
+            sx={{
               padding: "10px",
-              height: "89vh",
-              overflowY: "scroll",
-              display: "flex",
-              flexDirection: "column",
+              height: "calc(100% - 46px)",
+              overflowY: "auto",
             }}
           >
-            <Box style={{ width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
               {!showAllProducts && (
                 <>
                   {initialCardItems.map((item, index) => (
