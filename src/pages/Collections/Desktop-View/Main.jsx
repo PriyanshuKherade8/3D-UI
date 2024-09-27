@@ -282,7 +282,13 @@ const Main = () => {
   }, [sessionId]);
 
   const selectedItem =
-    selectedIndex !== null ? [initialCardItems[selectedIndex]] : [];
+    selectedIndex !== null
+      ? [initialCardItems[selectedIndex]]
+      : initialCardItems?.find((item) => item.item_id === currItemId)
+      ? [initialCardItems?.find((item) => item.item_id === currItemId)]
+      : [];
+
+  console.log("selectedItem", selectedItem);
 
   const payloadForItemChange = {
     session_id: sessionId,
