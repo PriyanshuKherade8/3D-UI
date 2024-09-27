@@ -5,13 +5,11 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Button,
   Drawer,
   Tab,
   Tabs,
 } from "@mui/material";
 import {
-  Menu,
   CameraAlt,
   Folder,
   GridView,
@@ -29,8 +27,9 @@ const Container = styled.div`
 const Content = styled.div`
   flex: 1;
   overflow-y: auto;
-  transition: height 0.3s ease-in-out; /* Adjusted transition */
-  height: ${(props) => (props.drawerOpen ? "calc(100% - 300px)" : "100%")};
+  transition: padding-bottom 0.3s ease-in-out;
+  padding-bottom: ${(props) =>
+    props.drawerOpen ? "300px" : "0"}; /* Prevent content overlap */
 `;
 
 const IconsContainer = styled.div`
@@ -41,9 +40,8 @@ const IconsContainer = styled.div`
 
 const DrawerContent = styled.div`
   padding: 16px;
-  position: relative;
   text-align: center;
-  transition: height 0.3s ease-in-out; /* Added transition */
+  transition: height 0.3s ease-in-out; /* Use CSS transition */
   overflow: hidden; /* Prevent overflow during transition */
 `;
 
@@ -118,7 +116,7 @@ export default function SwipeableEdgeDrawer() {
   };
 
   return (
-    <Container style={{ border: "1px solid red" }}>
+    <Container>
       <Content drawerOpen={drawerHeight > MIN_HEIGHT}>
         <IconsContainer>
           <div>
@@ -152,7 +150,6 @@ export default function SwipeableEdgeDrawer() {
           onTouchEnd={handleTouchEnd}
         >
           <DragHandle />
-          {/* Only show content when drawer height is at MAX_HEIGHT */}
           {drawerHeight === MAX_HEIGHT && (
             <>
               <Typography variant="h6">Title</Typography>
