@@ -22,12 +22,14 @@ const ProductView = styled(Box)`
 const BottomDrawer = styled(Box)`
   padding: 16px;
   background-color: #fff;
+  overflow: hidden; /* Prevent scrolling inside the drawer */
 `;
 
 const ScrollableOptions = styled(Box)`
   display: flex;
-  overflow-x: auto;
+  /* overflow-x: auto; */ /* Remove horizontal scrolling */
   padding: 8px;
+  flex-wrap: wrap; /* Allow wrapping of items */
 `;
 
 const OptionItem = styled(Box)`
