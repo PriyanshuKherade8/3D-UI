@@ -22,7 +22,7 @@ const Container = styled.div`
   flex-direction: column;
   height: 100vh;
   background-color: #f5f5f5;
-  overscroll-behavior="none";
+  overscroll-behavior=none;
 `;
 
 const Content = styled.div`
