@@ -2,7 +2,8 @@ import React, { useState, useRef } from "react";
 import { Drawer, Box, Typography, Grid } from "@mui/material";
 import { styled } from "styled-components";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-
+import { useGetExperienceDataById } from "../../services";
+import IframeResizer from "@iframe-resizer/react";
 const AppContainer = styled(Box)`
   position: relative;
   height: 100vh;
@@ -96,15 +97,35 @@ const MobileDrawerApp = () => {
     setDrawerHeight(0); // Reset height when closing
   };
 
+  const { data } = useGetExperienceDataById();
+  const getData = data?.data;
+
+  const experienceId = getData?.experience?.experience_id;
+  const productKey = getData?.experience?.products[0]?.product_key;
+  const canvasUrl = "http://64.227.170.212";
+  const sessionId = getData?.sessionID;
+
+  const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
+  console.log("url", url);
+
   return (
     <AppContainer>
       {/* Top Product View */}
       <ProductView isDrawerOpen={isDrawerOpen}>
-        <img
+        {/* <img
           src="https://via.placeholder.com/300" // Replace with your product image
           alt="Handbag"
           style={{ maxWidth: "80%" }}
-        />
+        /> */}
+        <Box sx={{ flex: 1 }}>
+          <IframeResizer
+            id="one"
+            src={url}
+            scrolling="no"
+            height="100%"
+            width="100%"
+          />
+        </Box>
       </ProductView>
 
       {/* Scroll-Up Icon (always visible) */}
