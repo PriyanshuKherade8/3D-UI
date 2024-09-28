@@ -49,6 +49,7 @@ const OptionContainer = styled.div`
   display: flex;
   overflow-x: auto;
   margin-top: 16px;
+  overscroll-behavior="none"
 `;
 
 const OptionItem = styled.div`
@@ -111,7 +112,10 @@ export default function SwipeableEdgeDrawer() {
   };
 
   return (
-    <Container border={{ height: "80vh", overscrollBehavior: "none" }}>
+    <Container
+
+    // border={{ height: "80vh", overscrollBehavior: "none" }}
+    >
       <Content drawerOpen={drawerHeight > MIN_HEIGHT}>
         <IconsContainer>
           <div>
