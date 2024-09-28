@@ -6,7 +6,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 const AppContainer = styled(Box)`
   position: relative;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Prevent scrolling */
 `;
 
 const ProductView = styled(Box)`
@@ -22,24 +22,21 @@ const ProductView = styled(Box)`
 const BottomDrawer = styled(Box)`
   padding: 16px;
   background-color: #fff;
-  overflow: hidden; /* Prevent scrolling inside the drawer */
 `;
 
 const ScrollableOptions = styled(Box)`
   display: flex;
-  /* overflow-x: auto; */ /* Remove horizontal scrolling */
-  padding: 8px;
-  flex-wrap: wrap; /* Allow wrapping of items */
+  flex-direction: column; /* Change to column to avoid horizontal scroll */
+  overflow-y: auto; /* Allow vertical scrolling within the drawer */
+  max-height: 200px; /* Set a max height for the scrollable area */
 `;
 
 const OptionItem = styled(Box)`
-  flex: 0 0 auto;
-  margin-right: 8px;
-  text-align: center;
+  margin-bottom: 16px; /* Add some spacing between options */
 `;
 
 const ScrollUpIconContainer = styled(Box)`
-  position: absolute;
+  position: fixed; /* Fixed positioning */
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
@@ -51,6 +48,7 @@ const ScrollUpIconContainer = styled(Box)`
   width: 60px;
   height: 40px;
   cursor: pointer;
+  z-index: 10; /* Ensure the icon is above other elements */
 `;
 
 const MobileDrawerApp = () => {
@@ -62,12 +60,10 @@ const MobileDrawerApp = () => {
   const openThreshold = 100; // Minimum swipe distance to open the drawer
   const closeThreshold = 100; // Minimum swipe distance to close the drawer
 
-  // Handle touch start to record initial touch position
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
   };
 
-  // Handle touch move to calculate how far the user has dragged
   const handleTouchMove = (e) => {
     touchCurrentY.current = e.touches[0].clientY;
     const distanceMoved = touchStartY.current - touchCurrentY.current;
@@ -81,7 +77,6 @@ const MobileDrawerApp = () => {
     }
   };
 
-  // Handle touch end to finalize drawer open or close based on distance
   const handleTouchEnd = () => {
     const distanceMoved = touchStartY.current - touchCurrentY.current;
 
@@ -112,16 +107,14 @@ const MobileDrawerApp = () => {
         />
       </ProductView>
 
-      {/* Scroll-Up Icon (always visible when drawer is closed) */}
-      {!isDrawerOpen && (
-        <ScrollUpIconContainer
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <KeyboardArrowUpIcon />
-        </ScrollUpIconContainer>
-      )}
+      {/* Scroll-Up Icon (always visible) */}
+      <ScrollUpIconContainer
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <KeyboardArrowUpIcon />
+      </ScrollUpIconContainer>
 
       {/* Bottom Drawer */}
       <Drawer
