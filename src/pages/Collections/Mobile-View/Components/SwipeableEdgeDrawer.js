@@ -23,7 +23,7 @@ const Container = styled.div`
   height: 100vh;
   background-color: #f5f5f5;
   overscroll-behavior: none;
-  // overflow: hidden;
+  overflow: hidden;
 `;
 
 const Content = styled.div`
