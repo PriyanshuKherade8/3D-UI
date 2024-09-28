@@ -1,201 +1,113 @@
-import React, { useState, useRef } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
+  Drawer,
+  Box,
+  Button,
   IconButton,
   Typography,
-  Drawer,
-  Tab,
-  Tabs,
+  Grid,
 } from "@mui/material";
-import {
-  CameraAlt,
-  Folder,
-  GridView,
-  ArrowBack,
-  ArrowForward,
-} from "@mui/icons-material";
+import { styled } from "styled-components";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const AppContainer = styled(Box)`
+  position: relative;
   height: 100vh;
-  background-color: #f5f5f5;
-  overscroll-behavior: none;
   overflow: hidden;
 `;
 
-const Content = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  transition: padding-bottom 0.3s ease-in-out;
-  padding-bottom: ${(props) =>
-    props.drawerOpen ? "300px" : "0"}; /* Prevent content overlap */
-`;
-
-const IconsContainer = styled.div`
+const ProductView = styled(Box)`
+  height: ${({ isDrawerOpen }) =>
+    isDrawerOpen ? "calc(100vh - 300px)" : "100vh"};
+  transition: height 0.3s ease;
   display: flex;
-  justify-content: space-between;
-  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
 `;
 
-const DrawerContent = styled.div`
+const BottomDrawer = styled(Box)`
   padding: 16px;
-  text-align: center;
-  transition: height 0.3s ease-in-out; /* Use CSS transition */
-  overflow: hidden; /* Prevent overflow during transition */
+  background-color: #fff;
 `;
 
-const OptionContainer = styled.div`
+const ScrollableOptions = styled(Box)`
   display: flex;
   overflow-x: auto;
-  margin-top: 16px;
-  overscroll-behavior="none"
+  padding: 8px;
 `;
 
-const OptionItem = styled.div`
+const OptionItem = styled(Box)`
+  flex: 0 0 auto;
   margin-right: 8px;
   text-align: center;
-  border: ${(props) => (props.selected ? "2px solid blue" : "none")};
 `;
 
-const OptionImage = styled.img`
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-`;
+const MobileDrawerApp = () => {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
-const DragHandle = styled.div`
-  width: 40px;
-  height: 5px;
-  background-color: gray;
-  border-radius: 5px;
-  margin: 10px auto;
-`;
-
-export default function SwipeableEdgeDrawer() {
-  const [drawerHeight, setDrawerHeight] = useState(50); // Initial drawer height (px)
-  const [selectedTab, setSelectedTab] = useState("Handle Chain");
-  const isDragging = useRef(false);
-  const startY = useRef(0);
-  const currentHeight = useRef(50);
-
-  const MAX_HEIGHT = 300;
-  const MIN_HEIGHT = 50;
-  const THRESHOLD = 150;
-
-  const handleTouchStart = (e) => {
-    isDragging.current = true;
-    startY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging.current) return;
-
-    const touchY = e.touches[0].clientY;
-    const deltaY = startY.current - touchY;
-    const newHeight = Math.min(
-      Math.max(currentHeight.current + deltaY, MIN_HEIGHT),
-      MAX_HEIGHT // Restrict to MAX_HEIGHT
-    );
-    setDrawerHeight(newHeight);
-  };
-
-  const handleTouchEnd = () => {
-    isDragging.current = false;
-    currentHeight.current = drawerHeight;
-
-    if (drawerHeight > THRESHOLD) {
-      setDrawerHeight(MAX_HEIGHT);
-    } else {
-      setDrawerHeight(MIN_HEIGHT);
-    }
+  const toggleDrawer = () => {
+    setDrawerOpen(!isDrawerOpen);
   };
 
   return (
-    <Container
+    <AppContainer>
+      <ProductView isDrawerOpen={isDrawerOpen}>
+        <IconButton
+          onClick={toggleDrawer}
+          style={{ position: "absolute", top: 16, left: 16 }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <img
+          src="https://via.placeholder.com/300"
+          alt="Handbag"
+          style={{ maxWidth: "80%" }}
+        />
+      </ProductView>
 
-    // border={{ height: "80vh", overscrollBehavior: "none" }}
-    >
-      <Content drawerOpen={drawerHeight > MIN_HEIGHT}>
-        <IconsContainer>
-          <div>
-            <IconButton>
-              <CameraAlt />
-            </IconButton>
-            <IconButton>
-              <Folder />
-            </IconButton>
-          </div>
-          <IconButton>
-            <GridView />
-          </IconButton>
-        </IconsContainer>
-      </Content>
-
+      {/* Bottom Drawer */}
       <Drawer
         anchor="bottom"
-        open
-        variant="persistent"
-        PaperProps={{
-          style: {
-            height: `${drawerHeight}px`,
-            overflow: "hidden",
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+        hideBackdrop={true}
+        BackdropProps={{ invisible: true }}
+        sx={{
+          "& .MuiDrawer-paper": {
+            height: "300px",
+            borderRadius: "12px 12px 0 0",
+            pointerEvents: "auto",
           },
         }}
       >
-        <DrawerContent
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <DragHandle />
-          {drawerHeight === MAX_HEIGHT && (
-            <>
-              <Typography variant="h6">Title</Typography>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <IconButton>
-                  <ArrowBack />
-                </IconButton>
-                <IconButton>
-                  <ArrowForward />
-                </IconButton>
-              </div>
-              <Tabs
-                value={selectedTab}
-                onChange={(_, newValue) => setSelectedTab(newValue)}
-                variant="scrollable"
-                scrollButtons="auto"
-              >
-                <Tab label="Color" value="Color" />
-                <Tab label="Handle Chain" value="Handle Chain" />
-                <Tab label="Material" value="Material" />
-                <Tab label="Buckle" value="Buckle" />
-              </Tabs>
-              <OptionContainer>
-                {["Strings", "Leather", "Silver", "Gold", "Leather"].map(
-                  (option, index) => (
-                    <OptionItem key={index} selected={index === 3}>
-                      <OptionImage
-                        src={`/placeholder.svg?height=50&width=50&text=${option}`}
-                        alt={option}
-                      />
-                      <Typography variant="caption">{option}</Typography>
-                    </OptionItem>
-                  )
-                )}
-              </OptionContainer>
-            </>
-          )}
-        </DrawerContent>
+        <BottomDrawer>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="h6">Title</Typography>
+            <Button variant="outlined" onClick={toggleDrawer}>
+              Done
+            </Button>
+          </Box>
+
+          <ScrollableOptions>
+            <OptionItem>
+              <Typography variant="subtitle2">Handle Chain</Typography>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <img src="https://via.placeholder.com/50" alt="Strings" />
+                  <Typography variant="caption">Strings</Typography>
+                </Grid>
+                <Grid item>
+                  <img src="https://via.placeholder.com/50" alt="Leather" />
+                  <Typography variant="caption">Leather</Typography>
+                </Grid>
+              </Grid>
+            </OptionItem>
+          </ScrollableOptions>
+        </BottomDrawer>
       </Drawer>
-    </Container>
+    </AppContainer>
   );
-}
+};
+
+export default MobileDrawerApp;
