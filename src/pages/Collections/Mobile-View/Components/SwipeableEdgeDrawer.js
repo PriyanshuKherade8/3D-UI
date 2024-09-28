@@ -80,15 +80,13 @@ export default function SwipeableEdgeDrawer() {
 
   const MAX_HEIGHT = 300;
   const MIN_HEIGHT = 50;
-  const THRESHOLD = 150; // Threshold to fully open or close the drawer
+  const THRESHOLD = 150;
 
-  // Handle touch start
   const handleTouchStart = (e) => {
     isDragging.current = true;
     startY.current = e.touches[0].clientY;
   };
 
-  // Handle touch move
   const handleTouchMove = (e) => {
     if (!isDragging.current) return;
 
@@ -101,22 +99,19 @@ export default function SwipeableEdgeDrawer() {
     setDrawerHeight(newHeight);
   };
 
-  // Handle touch end
   const handleTouchEnd = () => {
     isDragging.current = false;
     currentHeight.current = drawerHeight;
 
-    // If the drawer is above the threshold, snap it to full height (MAX_HEIGHT)
-    // Otherwise, snap it back to the minimum height (MIN_HEIGHT)
     if (drawerHeight > THRESHOLD) {
-      setDrawerHeight(MAX_HEIGHT); // Fully open
+      setDrawerHeight(MAX_HEIGHT);
     } else {
-      setDrawerHeight(MIN_HEIGHT); // Fully close
+      setDrawerHeight(MIN_HEIGHT);
     }
   };
 
   return (
-    <Container>
+    <Container border={{ height: "80vh", overscrollBehavior: "none" }}>
       <Content drawerOpen={drawerHeight > MIN_HEIGHT}>
         <IconsContainer>
           <div>
@@ -140,7 +135,7 @@ export default function SwipeableEdgeDrawer() {
         PaperProps={{
           style: {
             height: `${drawerHeight}px`,
-            overflow: "hidden", // Prevent overflow when drawer is in partially opened state
+            overflow: "hidden",
           },
         }}
       >
