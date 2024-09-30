@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
-import { Drawer, Box, Typography, Grid } from "@mui/material";
+import { SwipeableDrawer, Box, Typography, Grid } from "@mui/material";
 import { styled } from "styled-components";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useGetExperienceDataById } from "../../services";
 import IframeResizer from "@iframe-resizer/react";
+
 const AppContainer = styled(Box)`
   position: relative;
   height: 100vh;
-  overflow: hidden; /* Prevent scrolling */
+  overflow: hidden;
 `;
 
 //  height: ${({ isDrawerOpen }) =>
@@ -28,17 +29,17 @@ const BottomDrawer = styled(Box)`
 
 const ScrollableOptions = styled(Box)`
   display: flex;
-  flex-direction: column; /* Change to column to avoid horizontal scroll */
-  overflow-y: auto; /* Allow vertical scrolling within the drawer */
-  max-height: 200px; /* Set a max height for the scrollable area */
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 200px;
 `;
 
 const OptionItem = styled(Box)`
-  margin-bottom: 16px; /* Add some spacing between options */
+  margin-bottom: 16px;
 `;
 
 const ScrollUpIconContainer = styled(Box)`
-  position: fixed; /* Fixed positioning */
+  position: fixed;
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
@@ -46,21 +47,30 @@ const ScrollUpIconContainer = styled(Box)`
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  // border-radius: 50px;
   width: 100%;
   height: 40px;
   cursor: pointer;
-  z-index: 10; /* Ensure the icon is above other elements */
+  z-index: 10;
+`;
+
+const IframeOverlay = styled(Box)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 1001;
+  pointer-events: none;
 `;
 
 const MobileDrawerApp = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [drawerHeight, setDrawerHeight] = useState(0); // for dynamic drawer opening/closing
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
 
-  const openThreshold = 100; // Minimum swipe distance to open the drawer
-  const closeThreshold = 100; // Minimum swipe distance to close the drawer
+  const openThreshold = 100;
+  const closeThreshold = 100;
 
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
@@ -72,10 +82,10 @@ const MobileDrawerApp = () => {
 
     if (distanceMoved > 0) {
       // User is dragging up (open drawer)
-      setDrawerHeight(distanceMoved);
+      setDrawerOpen(true);
     } else if (isDrawerOpen && distanceMoved < 0) {
       // User is dragging down (close drawer)
-      setDrawerHeight(300 + distanceMoved); // Decrease the height as the user drags down
+      setDrawerOpen(false);
     }
   };
 
@@ -89,13 +99,6 @@ const MobileDrawerApp = () => {
       // Close drawer if the downward drag is enough
       setDrawerOpen(false);
     }
-
-    setDrawerHeight(0); // Reset drawer height when done
-  };
-
-  const handleCloseDrawer = () => {
-    setDrawerOpen(false);
-    setDrawerHeight(0); // Reset height when closing
   };
 
   const { data } = useGetExperienceDataById();
@@ -107,25 +110,22 @@ const MobileDrawerApp = () => {
   const sessionId = getData?.sessionID;
 
   const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
-  console.log("url", url);
 
   return (
     <AppContainer>
-      {/* Top Product View */}
-      <ProductView isDrawerOpen={isDrawerOpen}>
-        <Box sx={{ flex: 1, height: "100%" }}>
+      <ProductView>
+        <Box sx={{ flex: 1, height: "100%", position: "relative" }}>
           <IframeResizer
             id="one"
             src={url}
             scrolling="no"
             height="100%"
             width="100%"
-            style={{ pointerEvents: "auto" }} // Ensure iframe captures events
           />
+          {isDrawerOpen && <IframeOverlay />}
         </Box>
       </ProductView>
 
-      {/* Scroll-Up Icon (always visible) */}
       <ScrollUpIconContainer
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -134,60 +134,42 @@ const MobileDrawerApp = () => {
         <KeyboardArrowUpIcon />
       </ScrollUpIconContainer>
 
-      {/* Bottom Drawer */}
-      <Drawer
+      <SwipeableDrawer
         anchor="bottom"
-        open={isDrawerOpen || drawerHeight > 0}
-        onClose={handleCloseDrawer}
+        open={isDrawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onOpen={() => setDrawerOpen(true)}
+        swipeAreaWidth={40}
         hideBackdrop={true}
-        BackdropProps={{ invisible: true }}
-        PaperProps={{
-          style: {
-            height: drawerHeight > 0 ? `${drawerHeight}px` : "300px",
-            transition: drawerHeight > 0 ? "none" : "height 0.3s ease",
-            borderRadius: "12px 12px 0 0",
-            pointerEvents: "auto",
-            zIndex: 1000, // Ensure it's higher than the iframe
-          },
+        disableSwipeToOpen={false}
+        ModalProps={{
+          keepMounted: true,
         }}
       >
-        <BottomDrawer
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={{ pointerEvents: "auto" }}
-        >
+        <BottomDrawer>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">Title</Typography>
-            {/* Close drawer by touching the icon */}
-            <Box onClick={handleCloseDrawer}>
+            <Box onClick={() => setDrawerOpen(false)}>
               <KeyboardArrowUpIcon />
             </Box>
           </Box>
-          {/* Scrollable Options */}
           <ScrollableOptions>
-            {/* Handle Chain */}
             <OptionItem>
               <Typography variant="subtitle2">Handle Chain</Typography>
               <Grid container spacing={2}>
                 <Grid item>
-                  <img
-                    src="https://via.placeholder.com/50" // Replace with actual options
-                    alt="Strings"
-                  />
+                  <img src="https://via.placeholder.com/50" alt="Strings" />
                   <Typography variant="caption">Strings</Typography>
                 </Grid>
                 <Grid item>
                   <img src="https://via.placeholder.com/50" alt="Leather" />
                   <Typography variant="caption">Leather</Typography>
                 </Grid>
-                {/* Add more options as per your design */}
               </Grid>
             </OptionItem>
-            {/* Add more categories like Material, Buckle, etc */}
           </ScrollableOptions>
         </BottomDrawer>
-      </Drawer>
+      </SwipeableDrawer>
     </AppContainer>
   );
 };
