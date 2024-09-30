@@ -5,6 +5,7 @@ import { useGetExperienceDataById } from "../../services";
 import IframeResizer from "@iframe-resizer/react";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import WorkIcon from "@mui/icons-material/Work";
+import AnimatedMenu from "./AnimatedMenu"; // Import your AnimatedMenu component
 
 const AppContainer = (props) => (
   <Box
@@ -118,9 +119,9 @@ const MobileDrawerApp = () => {
     setOptionsOpen((prev) => {
       const newValue = !prev;
       if (newValue) {
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow = "hidden"; // Disable scroll
       } else {
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "auto"; // Enable scroll
       }
       return newValue;
     });
@@ -134,6 +135,18 @@ const MobileDrawerApp = () => {
 
   return (
     <AppContainer>
+      {/* Animated Menu on the left side */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          zIndex: 20, // Ensure it appears above other components
+        }}
+      >
+        <AnimatedMenu /> {/* Place the AnimatedMenu component here */}
+      </Box>
+
       <ProductView>
         <Box
           sx={{
@@ -183,10 +196,6 @@ const MobileDrawerApp = () => {
         <Button
           variant="contained"
           sx={{ color: "white" }}
-          // onClick={() => {
-          //   setShowAll((prev) => !prev);
-          //   setIsDisplayComponent((prev) => !prev);
-          // }}
           onClick={handleToggleDisplayComponent}
         >
           {isShowAll ? "Show All Products" : "Configure"}
@@ -227,9 +236,7 @@ const MobileDrawerApp = () => {
           zIndex: 10,
           cursor: "pointer",
         }}
-        onClick={() => {
-          handleToggleOptions();
-        }}
+        onClick={handleToggleOptions}
       >
         <KeyboardArrowUpIcon />
       </Box>
