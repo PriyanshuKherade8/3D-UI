@@ -10,9 +10,10 @@ const AppContainer = styled(Box)`
   overflow: hidden; /* Prevent scrolling */
 `;
 
+//  height: ${({ isDrawerOpen }) =>
+//     isDrawerOpen ? "calc(100vh - 300px)" : "100vh"};
 const ProductView = styled(Box)`
-  height: ${({ isDrawerOpen }) =>
-    isDrawerOpen ? "calc(100vh - 300px)" : "100vh"};
+  height: 100vh;
   transition: height 0.3s ease;
   display: flex;
   justify-content: center;
@@ -38,15 +39,15 @@ const OptionItem = styled(Box)`
 
 const ScrollUpIconContainer = styled(Box)`
   position: fixed; /* Fixed positioning */
-  bottom: 16px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  border-radius: 50px;
-  width: 60px;
+  // border-radius: 50px;
+  width: 100%;
   height: 40px;
   cursor: pointer;
   z-index: 10; /* Ensure the icon is above other elements */
@@ -112,18 +113,14 @@ const MobileDrawerApp = () => {
     <AppContainer>
       {/* Top Product View */}
       <ProductView isDrawerOpen={isDrawerOpen}>
-        {/* <img
-          src="https://via.placeholder.com/300" // Replace with your product image
-          alt="Handbag"
-          style={{ maxWidth: "80%" }}
-        /> */}
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, height: "100%" }}>
           <IframeResizer
             id="one"
             src={url}
             scrolling="no"
             height="100%"
             width="100%"
+            style={{ pointerEvents: "auto" }} // Ensure iframe captures events
           />
         </Box>
       </ProductView>
@@ -140,16 +137,17 @@ const MobileDrawerApp = () => {
       {/* Bottom Drawer */}
       <Drawer
         anchor="bottom"
-        open={isDrawerOpen || drawerHeight > 0} // Opens or adjusts based on touch gesture
+        open={isDrawerOpen || drawerHeight > 0}
         onClose={handleCloseDrawer}
         hideBackdrop={true}
         BackdropProps={{ invisible: true }}
         PaperProps={{
           style: {
-            height: drawerHeight > 0 ? `${drawerHeight}px` : "300px", // Dynamically adjust height based on touch
-            transition: drawerHeight > 0 ? "none" : "height 0.3s ease", // Disable transition while dragging
+            height: drawerHeight > 0 ? `${drawerHeight}px` : "300px",
+            transition: drawerHeight > 0 ? "none" : "height 0.3s ease",
             borderRadius: "12px 12px 0 0",
             pointerEvents: "auto",
+            zIndex: 1000, // Ensure it's higher than the iframe
           },
         }}
       >
@@ -157,6 +155,7 @@ const MobileDrawerApp = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          style={{ pointerEvents: "auto" }}
         >
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">Title</Typography>
