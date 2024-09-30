@@ -11,11 +11,8 @@ const AppContainer = styled(Box)`
   overflow: hidden;
 `;
 
-//  height: ${({ isDrawerOpen }) =>
-//     isDrawerOpen ? "calc(100vh - 300px)" : "100vh"};
 const ProductView = styled(Box)`
   height: 100vh;
-  transition: height 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,14 +36,14 @@ const OptionItem = styled(Box)`
 `;
 
 const ScrollUpIconContainer = styled(Box)`
-  position: fixed;
+  position: fixed; /* Keep it fixed */
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: white;
   width: 100%;
   height: 40px;
   cursor: pointer;
@@ -69,9 +66,6 @@ const MobileDrawerApp = () => {
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
 
-  const openThreshold = 100;
-  const closeThreshold = 100;
-
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
   };
@@ -80,25 +74,16 @@ const MobileDrawerApp = () => {
     touchCurrentY.current = e.touches[0].clientY;
     const distanceMoved = touchStartY.current - touchCurrentY.current;
 
-    if (distanceMoved > 0) {
-      // User is dragging up (open drawer)
+    // Open the drawer if dragged upwards
+    if (distanceMoved > 30 && !isDrawerOpen) {
       setDrawerOpen(true);
-    } else if (isDrawerOpen && distanceMoved < 0) {
-      // User is dragging down (close drawer)
-      setDrawerOpen(false);
     }
   };
 
   const handleTouchEnd = () => {
-    const distanceMoved = touchStartY.current - touchCurrentY.current;
-
-    if (distanceMoved > openThreshold) {
-      // Open drawer if the upward drag is enough
-      setDrawerOpen(true);
-    } else if (distanceMoved < -closeThreshold && isDrawerOpen) {
-      // Close drawer if the downward drag is enough
-      setDrawerOpen(false);
-    }
+    // Reset touch positions
+    touchStartY.current = 0;
+    touchCurrentY.current = 0;
   };
 
   const { data } = useGetExperienceDataById();
@@ -126,14 +111,6 @@ const MobileDrawerApp = () => {
         </Box>
       </ProductView>
 
-      <ScrollUpIconContainer
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <KeyboardArrowUpIcon />
-      </ScrollUpIconContainer>
-
       <SwipeableDrawer
         anchor="bottom"
         open={isDrawerOpen}
@@ -144,6 +121,12 @@ const MobileDrawerApp = () => {
         disableSwipeToOpen={false}
         ModalProps={{
           keepMounted: true,
+        }}
+        PaperProps={{
+          style: {
+            height: "calc(100vh - 60vh)",
+            overflow: "hidden",
+          },
         }}
       >
         <BottomDrawer>
@@ -170,6 +153,14 @@ const MobileDrawerApp = () => {
           </ScrollableOptions>
         </BottomDrawer>
       </SwipeableDrawer>
+
+      <ScrollUpIconContainer
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <KeyboardArrowUpIcon />
+      </ScrollUpIconContainer>
     </AppContainer>
   );
 };
