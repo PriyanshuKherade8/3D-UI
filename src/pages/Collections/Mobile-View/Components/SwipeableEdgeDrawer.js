@@ -3,6 +3,8 @@ import { Box, Typography, Grid, Button, Slide } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useGetExperienceDataById } from "../../services";
 import IframeResizer from "@iframe-resizer/react";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import WorkIcon from "@mui/icons-material/Work";
 
 const AppContainer = (props) => (
   <Box
@@ -42,7 +44,7 @@ const ScrollableOptions = ({ onClose, isOptionsOpen }) => (
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
-        bottom: isOptionsOpen ? "60px" : "-240px", // Adjust position to not obstruct the iframe
+        bottom: isOptionsOpen ? "10vh" : "-30vh", // Adjust position using vh units
         left: "0",
         right: "0",
         zIndex: 1,
@@ -70,6 +72,7 @@ const ScrollableOptions = ({ onClose, isOptionsOpen }) => (
 
 const MobileDrawerApp = () => {
   const [isOptionsOpen, setOptionsOpen] = useState(false);
+  const [isShowAll, setShowAll] = useState(false); // New state for toggling button text
   const { data } = useGetExperienceDataById();
   const getData = data?.data;
 
@@ -80,8 +83,12 @@ const MobileDrawerApp = () => {
 
   const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
 
-  const handleToggle = () => {
+  const handleToggleOptions = () => {
     setOptionsOpen((prev) => !prev);
+  };
+
+  const handleToggleShowAll = () => {
+    setShowAll((prev) => !prev);
   };
 
   return (
@@ -102,22 +109,44 @@ const MobileDrawerApp = () => {
         </Box>
       </ProductView>
 
-      {/* Right-side Button */}
+      {/* Right-side Button (Configure / Show All Products) */}
       <Box
         sx={{
           position: "fixed",
-          top: isOptionsOpen ? "calc(100% - 212px)" : "calc(100% - 90px)",
-          right: "0px", // Right-side button
+          top: isOptionsOpen ? "calc(100vh - 32vh)" : "calc(100vh - 14vh)", // Using vh units for responsiveness
+          right: "0%",
           color: "white",
           padding: "8px",
           zIndex: 12,
           cursor: "pointer",
         }}
       >
-        <Button variant="contained" sx={{ color: "white" }}>
-          Right Button
+        <Button
+          variant="contained"
+          sx={{ color: "white" }}
+          onClick={handleToggleShowAll}
+        >
+          {isShowAll ? "Show All Products" : "Configure"}
         </Button>
       </Box>
+
+      {/* Left-side Icons when Show All Products is active */}
+      {isShowAll && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: isOptionsOpen ? "calc(100vh - 32vh)" : "calc(100vh - 14vh)",
+            left: "0%",
+            padding: "8px",
+            display: "flex",
+            gap: "8px",
+            zIndex: 12,
+          }}
+        >
+          <LocalMallIcon />
+          <WorkIcon />
+        </Box>
+      )}
 
       {/* Bottom Arrow Icon and Drawer Toggle */}
       <Box
@@ -128,14 +157,14 @@ const MobileDrawerApp = () => {
           transform: "translateX(-50%)",
           backgroundColor: "white",
           width: "100%",
-          height: "40px",
+          height: "6vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           zIndex: 10,
           cursor: "pointer",
         }}
-        onClick={handleToggle}
+        onClick={handleToggleOptions}
       >
         <KeyboardArrowUpIcon />
       </Box>
