@@ -11,6 +11,8 @@ const AppContainer = styled(Box)`
   overflow: hidden;
 `;
 
+//  height: ${({ isDrawerOpen }) =>
+//     isDrawerOpen ? "calc(100vh - 300px)" : "100vh"};
 const ProductView = styled(Box)`
   height: 100vh;
   display: flex;
