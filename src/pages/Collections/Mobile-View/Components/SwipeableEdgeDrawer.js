@@ -33,23 +33,22 @@ const ProductView = (props) => (
   </Box>
 );
 
-const ScrollableOptions = ({ onClose, isOptionsOpen }) => (
+const ConfigureOptions = ({ onClose, isOptionsOpen }) => (
   <Slide direction="up" in={isOptionsOpen} mountOnEnter unmountOnExit>
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        overflowY: "auto",
-        maxHeight: "200px",
+        overflow: "hidden",
+        height: "20%",
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
-        bottom: isOptionsOpen ? "10vh" : "-30vh", // Adjust position using vh units
+        bottom: isOptionsOpen ? "0vh" : "-30vh",
         left: "0",
         right: "0",
         zIndex: 1,
         transition: "bottom 0.3s ease",
-        bottom: "0",
       }}
     >
       <Box sx={{ marginBottom: "16px" }}>
@@ -65,14 +64,46 @@ const ScrollableOptions = ({ onClose, isOptionsOpen }) => (
           </Grid>
         </Grid>
       </Box>
-      <Button onClick={onClose}>Close</Button>
+    </Box>
+  </Slide>
+);
+
+const ShowAllProductsOptions = ({ onClose, isOptionsOpen }) => (
+  <Slide direction="up" in={isOptionsOpen} mountOnEnter unmountOnExit>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        height: "20%",
+        padding: "16px",
+        backgroundColor: "#fff",
+        position: "absolute",
+        bottom: isOptionsOpen ? "0vh" : "-30vh",
+        left: "0",
+        right: "0",
+        zIndex: 1,
+        transition: "bottom 0.3s ease",
+      }}
+    >
+      <Box sx={{ marginBottom: "16px" }}>
+        <Typography variant="subtitle2">Products</Typography>
+        <Grid container spacing={2}>
+          <Grid item>
+            <img src="https://via.placeholder.com/50" alt="Strings" />
+            <Typography variant="caption">Strings</Typography>
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   </Slide>
 );
 
 const MobileDrawerApp = () => {
   const [isOptionsOpen, setOptionsOpen] = useState(false);
-  const [isShowAll, setShowAll] = useState(false); // New state for toggling button text
+  const [isShowAll, setShowAll] = useState(false);
+  const [isDisplayComponent, setIsDisplayComponent] = useState(true);
+
   const { data } = useGetExperienceDataById();
   const getData = data?.data;
 
@@ -84,17 +115,33 @@ const MobileDrawerApp = () => {
   const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
 
   const handleToggleOptions = () => {
-    setOptionsOpen((prev) => !prev);
+    setOptionsOpen((prev) => {
+      const newValue = !prev;
+      if (newValue) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+      return newValue;
+    });
   };
 
-  const handleToggleShowAll = () => {
+  const handleToggleDisplayComponent = () => {
+    setIsDisplayComponent((prev) => !prev);
     setShowAll((prev) => !prev);
+    setOptionsOpen(true);
   };
 
   return (
     <AppContainer>
       <ProductView>
-        <Box sx={{ flex: 1, height: "100%", position: "relative" }}>
+        <Box
+          sx={{
+            flex: 1,
+            height: "100%",
+            position: "relative",
+          }}
+        >
           <IframeResizer
             id="one"
             src={url}
@@ -102,19 +149,31 @@ const MobileDrawerApp = () => {
             height="100%"
             width="100%"
           />
-          <ScrollableOptions
-            onClose={() => setOptionsOpen(false)}
-            isOptionsOpen={isOptionsOpen}
-          />
+          {!isDisplayComponent && (
+            <ConfigureOptions
+              onClose={() => {
+                setOptionsOpen(false);
+              }}
+              isOptionsOpen={isOptionsOpen}
+            />
+          )}
+          {isDisplayComponent && (
+            <ShowAllProductsOptions
+              onClose={() => {
+                setOptionsOpen(false);
+              }}
+              isOptionsOpen={isOptionsOpen}
+            />
+          )}
         </Box>
       </ProductView>
 
-      {/* Right-side Button (Configure / Show All Products) */}
+      {/* Right-side Button */}
       <Box
         sx={{
           position: "fixed",
-          top: isOptionsOpen ? "calc(100vh - 32vh)" : "calc(100vh - 14vh)", // Using vh units for responsiveness
-          right: "0%",
+          top: isOptionsOpen ? "calc(100% - 180px)" : "calc(100% - 90px)",
+          right: "0px",
           color: "white",
           padding: "8px",
           zIndex: 12,
@@ -124,7 +183,11 @@ const MobileDrawerApp = () => {
         <Button
           variant="contained"
           sx={{ color: "white" }}
-          onClick={handleToggleShowAll}
+          // onClick={() => {
+          //   setShowAll((prev) => !prev);
+          //   setIsDisplayComponent((prev) => !prev);
+          // }}
+          onClick={handleToggleDisplayComponent}
         >
           {isShowAll ? "Show All Products" : "Configure"}
         </Button>
@@ -135,7 +198,7 @@ const MobileDrawerApp = () => {
         <Box
           sx={{
             position: "fixed",
-            top: isOptionsOpen ? "calc(100vh - 32vh)" : "calc(100vh - 14vh)",
+            top: isOptionsOpen ? "calc(100% - 22vh)" : "calc(100% - 11vh)",
             left: "0%",
             padding: "8px",
             display: "flex",
@@ -157,14 +220,16 @@ const MobileDrawerApp = () => {
           transform: "translateX(-50%)",
           backgroundColor: "white",
           width: "100%",
-          height: "6vh",
+          height: "40px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           zIndex: 10,
           cursor: "pointer",
         }}
-        onClick={handleToggleOptions}
+        onClick={() => {
+          handleToggleOptions();
+        }}
       >
         <KeyboardArrowUpIcon />
       </Box>
