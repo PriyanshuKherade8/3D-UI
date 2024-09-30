@@ -102,27 +102,43 @@ const MobileDrawerApp = () => {
         </Box>
       </ProductView>
 
-      {!isOptionsOpen && (
-        <Box
-          sx={{
-            position: "fixed",
-            bottom: "0",
-            left: "50%",
-            transform: "translateX(-50%)",
-            backgroundColor: "white",
-            width: "100%",
-            height: "40px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10,
-            cursor: "pointer",
-          }}
-          onClick={handleToggle}
-        >
-          <KeyboardArrowUpIcon />
-        </Box>
-      )}
+      {/* Right-side Button */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: isOptionsOpen ? "calc(100% - 212px)" : "calc(100% - 90px)",
+          right: "0px", // Right-side button
+          color: "white",
+          padding: "8px",
+          zIndex: 12,
+          cursor: "pointer",
+        }}
+      >
+        <Button variant="contained" sx={{ color: "white" }}>
+          Right Button
+        </Button>
+      </Box>
+
+      {/* Bottom Arrow Icon and Drawer Toggle */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: "0",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: "white",
+          width: "100%",
+          height: "40px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 10,
+          cursor: "pointer",
+        }}
+        onClick={handleToggle}
+      >
+        <KeyboardArrowUpIcon />
+      </Box>
     </AppContainer>
   );
 };
