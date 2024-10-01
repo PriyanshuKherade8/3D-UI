@@ -11,7 +11,10 @@ import {
   CardContent,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useGetExperienceDataById } from "../../services";
+import {
+  useGetExperienceDataById,
+  useSetProductChangeCall,
+} from "../../services";
 import IframeResizer from "@iframe-resizer/react";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import WorkIcon from "@mui/icons-material/Work";
@@ -46,14 +49,14 @@ const ProductView = (props) => (
   </Box>
 );
 
-const ConfigureOptions = ({ onClose, isOptionsOpen }) => (
+const ConfigureOptions = ({ onClose, isOptionsOpen, selectedItem }) => (
   <Slide direction="up" in={isOptionsOpen} mountOnEnter unmountOnExit>
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        height: "20vh", // Drawer height is set to 20% of the viewport height
+        height: "20vh",
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
@@ -65,17 +68,13 @@ const ConfigureOptions = ({ onClose, isOptionsOpen }) => (
       }}
     >
       <Box sx={{ marginBottom: "16px" }}>
-        <Typography variant="subtitle2">Handle Chain</Typography>
-        <Grid container spacing={2}>
-          <Grid item>
-            <img src="https://via.placeholder.com/50" alt="Strings" />
-            <Typography variant="caption">Strings</Typography>
-          </Grid>
-          <Grid item>
-            <img src="https://via.placeholder.com/50" alt="Leather" />
-            <Typography variant="caption">Leather</Typography>
-          </Grid>
-        </Grid>
+        <Typography variant="subtitle2">Selected Item</Typography>
+        {selectedItem && ( // Conditionally render if selectedItem is present
+          <Box>
+            <img src={selectedItem.image} alt={selectedItem.title} />
+            <Typography variant="caption">{selectedItem.title}</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   </Slide>
@@ -167,7 +166,11 @@ const MobileDrawerApp = () => {
   const [isDisplayComponent, setIsDisplayComponent] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
+
   const { data } = useGetExperienceDataById();
+
+  const { mutate: changeProductCall } = useSetProductChangeCall();
+
   const getData = data?.data;
 
   const experienceId = getData?.experience?.experience_id;
@@ -235,6 +238,20 @@ const MobileDrawerApp = () => {
 
   console.log("selectedItem", selectedItem);
 
+  const payloadForItemChange = {
+    session_id: sessionId,
+    message: {
+      type: "change_item",
+      message: { item_id: selectedItem?.[0]?.item_id },
+    },
+  };
+
+  useEffect(() => {
+    if (selectedItem.length > 0) {
+      changeProductCall(payloadForItemChange);
+    }
+  }, [selectedIndex]);
+
   return (
     <AppContainer>
       {/* Animated Menu on the left side */}
@@ -264,38 +281,30 @@ const MobileDrawerApp = () => {
             height="100%"
             width="100%"
           />
+
           {!isDisplayComponent && (
             <ConfigureOptions
-              onClose={() => {
-                setOptionsOpen(false);
-              }}
+              onClose={() => setOptionsOpen(false)}
               isOptionsOpen={isOptionsOpen}
+              selectedItem={selectedItem[0]} // Pass the first item of selectedItem
             />
           )}
 
           {isDisplayComponent && (
-            <>
-              {initialCardItems?.map(
-                (item, index) => (
-                  console.log("item", item),
-                  (
-                    <ShowAllProductsOptions
-                      isOptionsOpen={isOptionsOpen}
-                      items={initialCardItems.map((item, index) => ({
-                        image: item.image,
-                        title: item.title,
-                        isSelected: selectedIndex === index,
-                        onClick: () => {
-                          setSelectedIndex(index);
-                          setShowAll((prev) => !prev);
-                        },
-                      }))}
-                      onClose={() => setOptionsOpen(false)} // Pass onClose if needed
-                    />
-                  )
-                )
-              )}
-            </>
+            <ShowAllProductsOptions
+              isOptionsOpen={isOptionsOpen}
+              items={initialCardItems?.map((item, index) => ({
+                image: item.image,
+                title: item.title,
+                isSelected: selectedIndex === index,
+                onClick: () => {
+                  setSelectedIndex(index);
+                  setShowAll(false);
+                  setOptionsOpen(true);
+                },
+              }))}
+              onClose={() => setOptionsOpen(false)} // Pass onClose if needed
+            />
           )}
         </Box>
       </ProductView>
