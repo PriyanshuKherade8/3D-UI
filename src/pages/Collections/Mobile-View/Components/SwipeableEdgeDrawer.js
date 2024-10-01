@@ -5,7 +5,7 @@ import { useGetExperienceDataById } from "../../services";
 import IframeResizer from "@iframe-resizer/react";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import WorkIcon from "@mui/icons-material/Work";
-import AnimatedMenu from "./AnimatedMenu"; // Import your AnimatedMenu component
+import AnimatedMenu from "./AnimatedMenu";
 
 const AppContainer = (props) => (
   <Box
@@ -41,7 +41,7 @@ const ConfigureOptions = ({ onClose, isOptionsOpen }) => (
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        height: "20%",
+        height: "20vh", // Drawer height is set to 20% of the viewport height
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
@@ -76,7 +76,7 @@ const ShowAllProductsOptions = ({ onClose, isOptionsOpen }) => (
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        height: "20%",
+        height: "20vh", // Drawer height set to 20% of the viewport height
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
@@ -119,9 +119,9 @@ const MobileDrawerApp = () => {
     setOptionsOpen((prev) => {
       const newValue = !prev;
       if (newValue) {
-        document.body.style.overflow = "hidden"; // Disable scroll
+        document.body.style.overflow = "hidden";
       } else {
-        document.body.style.overflow = "auto"; // Enable scroll
+        document.body.style.overflow = "auto";
       }
       return newValue;
     });
@@ -133,6 +133,8 @@ const MobileDrawerApp = () => {
     setOptionsOpen(true);
   };
 
+  const drawerHeight = "20vh"; // Adjust the drawer height for dynamic positioning
+
   return (
     <AppContainer>
       {/* Animated Menu on the left side */}
@@ -141,10 +143,10 @@ const MobileDrawerApp = () => {
           position: "absolute",
           top: "10px",
           left: "10px",
-          zIndex: 20, // Ensure it appears above other components
+          zIndex: 20,
         }}
       >
-        <AnimatedMenu /> {/* Place the AnimatedMenu component here */}
+        <AnimatedMenu />
       </Box>
 
       <ProductView>
@@ -185,8 +187,8 @@ const MobileDrawerApp = () => {
       <Box
         sx={{
           position: "fixed",
-          top: isOptionsOpen ? "calc(100% - 180px)" : "calc(100% - 90px)",
-          right: "0px",
+          bottom: isOptionsOpen ? `calc(${drawerHeight} + 50px)` : "40px", // Dynamically positioned based on drawer height
+          right: "2px", // Add some margin for better view on mobile
           color: "white",
           padding: "8px",
           zIndex: 12,
@@ -197,6 +199,7 @@ const MobileDrawerApp = () => {
           variant="contained"
           sx={{ color: "white" }}
           onClick={handleToggleDisplayComponent}
+          size="small"
         >
           {isShowAll ? "Show All Products" : "Configure"}
         </Button>
@@ -207,8 +210,8 @@ const MobileDrawerApp = () => {
         <Box
           sx={{
             position: "fixed",
-            top: isOptionsOpen ? "calc(100% - 22vh)" : "calc(100% - 11vh)",
-            left: "0%",
+            bottom: isOptionsOpen ? `calc(${drawerHeight} + 50px)` : "40px", // Dynamically positioned based on drawer height
+            left: "2px", // Better padding for small screens
             padding: "8px",
             display: "flex",
             gap: "8px",
@@ -224,7 +227,7 @@ const MobileDrawerApp = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: "0",
+          bottom: isOptionsOpen ? `calc(${drawerHeight} + 10px)` : "0px", // Dynamically positioned based on drawer height
           left: "50%",
           transform: "translateX(-50%)",
           backgroundColor: "white",

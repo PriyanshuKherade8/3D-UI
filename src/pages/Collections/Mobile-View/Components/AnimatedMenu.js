@@ -18,7 +18,7 @@ const MenuContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   overflow: hidden;
   height: ${({ open }) => (open ? "200px" : "0")}; /* Height transition */
   opacity: ${({ open }) => (open ? 1 : 0)}; /* Opacity transition */
@@ -37,7 +37,6 @@ const HamburgerContainer = styled(Box)`
   top: 5%;
   left: 10px;
   z-index: 1100; /* Ensure it's above the menu */
-  padding: 5px;
   background-color: white;
   border-radius: 10px;
 `;
