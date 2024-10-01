@@ -187,7 +187,7 @@ const MobileDrawerApp = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: isOptionsOpen ? `calc(${drawerHeight} + 50px)` : "40px", // Dynamically positioned based on drawer height
+          bottom: isOptionsOpen ? `calc(${drawerHeight} + 5vh)` : "6vh", // Dynamically positioned based on drawer height
           right: "2px", // Add some margin for better view on mobile
           color: "white",
           padding: "8px",
@@ -210,7 +210,7 @@ const MobileDrawerApp = () => {
         <Box
           sx={{
             position: "fixed",
-            bottom: isOptionsOpen ? `calc(${drawerHeight} + 50px)` : "40px", // Dynamically positioned based on drawer height
+            bottom: isOptionsOpen ? `calc(${drawerHeight} + 5vh)` : "6vh", // Dynamically positioned based on drawer height
             left: "2px", // Better padding for small screens
             padding: "8px",
             display: "flex",
@@ -227,7 +227,8 @@ const MobileDrawerApp = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: isOptionsOpen ? `calc(${drawerHeight} + 10px)` : "0px", // Dynamically positioned based on drawer height
+          // bottom: isOptionsOpen ? `calc(${drawerHeight} + 0px)` : "0px",
+          bottom: "0px",
           left: "50%",
           transform: "translateX(-50%)",
           backgroundColor: "white",
