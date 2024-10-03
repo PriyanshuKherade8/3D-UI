@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { backendClient, httpClientForIframe } from "../../httpClient";
 
-export const useGetExperienceDataById = () => {
+export const useGetExperienceDataById = (id) => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ["experience"],
+    queryKey: ["experience", id],
     queryFn: () =>
       httpClientForIframe.get(`/get_experience`, {
-        params: { experience: "EXP1000000024" },
+        params: { experience: id ? id : "EXP1000000024" },
       }),
   });
   return { data, error, isLoading };
