@@ -6,6 +6,7 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RedoIcon from "@mui/icons-material/Redo";
 
 const MenuContainer = styled(Box)`
   position: fixed;
@@ -20,7 +21,7 @@ const MenuContainer = styled(Box)`
   align-items: center;
   padding: 5px;
   overflow: hidden;
-  height: ${({ open }) => (open ? "200px" : "0")}; /* Height transition */
+  height: ${({ open }) => (open ? "" : "0")}; /* Height transition */
   opacity: ${({ open }) => (open ? 1 : 0)}; /* Opacity transition */
   transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
 `;
@@ -41,8 +42,33 @@ const HamburgerContainer = styled(Box)`
   border-radius: 10px;
 `;
 
-const AnimatedMenu = () => {
+const AnimatedMenu = ({
+  rotate,
+  setRotate,
+  sessionId,
+  sendRotateCall,
+  controlId,
+}) => {
   const [open, setOpen] = useState(false);
+
+  const handleRotate = () => {
+    setRotate((prev) => {
+      const newRotateValue = !prev;
+
+      const payload = {
+        session_id: sessionId,
+        message: {
+          type: "control",
+          message: { control_id: controlId, value: newRotateValue.toString() },
+        },
+      };
+
+      console.log("payload", payload);
+      sendRotateCall(payload);
+
+      return newRotateValue;
+    });
+  };
 
   return (
     <>
@@ -58,9 +84,9 @@ const AnimatedMenu = () => {
       {/* Menu that opens when toggled */}
       <MenuContainer open={open}>
         <IconButtonStyled visible={open}>
-          <SwapHorizIcon />
+          <RedoIcon onClick={handleRotate} />
         </IconButtonStyled>
-        <IconButtonStyled visible={open}>
+        {/* <IconButtonStyled visible={open}>
           <RefreshIcon />
         </IconButtonStyled>
         <IconButtonStyled visible={open}>
@@ -68,7 +94,7 @@ const AnimatedMenu = () => {
         </IconButtonStyled>
         <IconButtonStyled visible={open}>
           <ExpandMoreIcon />
-        </IconButtonStyled>
+        </IconButtonStyled> */}
       </MenuContainer>
     </>
   );
