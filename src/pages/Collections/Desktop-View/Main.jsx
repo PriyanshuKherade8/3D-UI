@@ -27,6 +27,7 @@ import {
 } from "../services";
 import io from "socket.io-client";
 import useSocket from "../../../hooks/useSocketMessages";
+import { useParams } from "react-router-dom";
 
 const Toolbar = ({
   rotate,
@@ -175,18 +176,28 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
         flexDirection: "column",
       }}
     >
-      <CardMedia
-        component="img"
-        height="170"
-        image={image}
-        alt={title}
+      <Box
         style={{
           border: isSelected ? "1px solid #007AFF" : "none",
           height: "164px",
           width: "164px",
-          objectFit: "cover",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-      />
+      >
+        <CardMedia
+          component="img"
+          height="170"
+          image={image}
+          alt={title}
+          style={{
+            height: "120px",
+            width: "98.28px",
+            objectFit: "cover",
+          }}
+        />
+      </Box>
       <CardContent
         style={{
           display: "flex",
@@ -225,8 +236,8 @@ const Main = () => {
   const handleIconClick = () => {
     setShowNewPaper(true);
   };
-
-  const { data } = useGetExperienceDataById();
+  const { id } = useParams();
+  const { data } = useGetExperienceDataById(id);
   console.log("allData", data?.data);
   const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
   const collectionActionData = data?.data?.experience?.collection;
@@ -240,7 +251,8 @@ const Main = () => {
       (icon) => icon.file_type === "L"
     )?.path;
     return {
-      image: image || "",
+      image: image || "https://i.ibb.co/2sGqztG/2.jpg",
+      // image: image || "",
       title: product.item_display_short_title || "Untitled",
       product_id: product?.product?.product_id,
       product: product?.product,

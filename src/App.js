@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SwipeableEdgeDrawer />} />
         <Route path="/about" element={<BottomDrawer />} />
-        <Route path="/abc" element={<Main />} />
+        <Route path="/desktop/:id" element={<Main />} />
         <Route path="*" element={<>{"Not Found"}</>} />
       </Routes>
     </Router>
