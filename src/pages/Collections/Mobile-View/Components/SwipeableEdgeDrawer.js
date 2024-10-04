@@ -12,6 +12,9 @@ import {
   Tabs,
   Tab,
   styled,
+  Paper,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
@@ -26,32 +29,12 @@ import AnimatedMenu from "./AnimatedMenu";
 import io from "socket.io-client";
 import useSocket from "../../../../hooks/useSocketMessages";
 
-const AppContainer = (props) => (
-  <Box
-    sx={{
-      position: "relative",
-      height: "100vh",
-      overflow: "hidden",
-      ...props.sx,
-    }}
-  >
-    {props.children}
-  </Box>
-);
-
-const ProductView = (props) => (
-  <Box
-    sx={{
-      height: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#f0f0f0",
-    }}
-  >
-    {props.children}
-  </Box>
-);
+const AppContainer = styled(Box)((props) => ({
+  position: "relative",
+  height: "100vh",
+  overflow: "hidden",
+  ...props.sx,
+}));
 
 const ScrollableContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -118,7 +101,7 @@ const ConfigureOptions = ({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          height: "20vh",
+          height: "40vh",
           padding: "16px",
           backgroundColor: "#fff",
           position: "absolute",
@@ -192,7 +175,7 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        height: "20vh", // Drawer height set to 20% of the viewport height
+        height: "40vh", // Drawer height set to 20% of the viewport height
         padding: "16px",
         backgroundColor: "#fff",
         position: "absolute",
@@ -265,17 +248,79 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
   </Slide>
 );
 
+const Views = ({ viewActionData, sessionId, collectionActionData }) => {
+  console.log("viewActionData", viewActionData, collectionActionData);
+
+  const { mutate: changeViewCall } = useSetProductChangeCall();
+
+  const handleViewChange = (view) => {
+    const item = collectionActionData?.items?.[0];
+
+    if (!item) {
+      console.error("No item found in collectionActionData");
+      return;
+    }
+
+    const viewPayload = {
+      session_id: sessionId,
+      message: {
+        type: "change_view",
+        message: {
+          item_id: item.item_id,
+          product_key: item.product.product_key,
+          view_id: view.view_id,
+        },
+      },
+    };
+
+    console.log("Generated viewPayload:", viewPayload);
+
+    changeViewCall(viewPayload);
+  };
+
+  return (
+    <Box>
+      <Box>
+        <Paper elevation={3} sx={{ display: "flex", flexDirection: "row" }}>
+          {/* Map through viewActionData to display the icons */}
+          {viewActionData?.map((view) => {
+            // Find the icon with file_type "L"
+            const largeIcon = view.view_icons.find(
+              (icon) => icon.file_type === "L"
+            );
+            return (
+              <Tooltip
+                key={view.view_id}
+                title={view.view_name || view.bag_name}
+              >
+                <IconButton onClick={() => handleViewChange(view)}>
+                  <img
+                    src={largeIcon.path}
+                    alt={view.view_name || view.bag_name}
+                    style={{ width: 30, height: 30 }}
+                  />
+                </IconButton>
+              </Tooltip>
+            );
+          })}
+        </Paper>
+      </Box>
+    </Box>
+  );
+};
+
 const MobileDrawerApp = () => {
   const [isOptionsOpen, setOptionsOpen] = useState(false);
   const [isShowAll, setShowAll] = useState(false);
   const [isDisplayComponent, setIsDisplayComponent] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-
+  const [rotate, setRotate] = useState(false);
   const { data } = useGetExperienceDataById();
-
+  const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
+  const collectionActionData = data?.data?.experience?.collection;
   const { mutate: changeProductCall } = useSetProductChangeCall();
-
+  const { mutate: sendRotateCall } = useSetActionCall();
   const getData = data?.data;
 
   const experienceId = getData?.experience?.experience_id;
@@ -325,6 +370,8 @@ const MobileDrawerApp = () => {
 
   console.log("bv", initialCardItems);
 
+  const controlId = getData?.experience?.controls?.[0]?.control_id;
+
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
       console.log("sessionId on canvas", sessionId);
@@ -368,10 +415,24 @@ const MobileDrawerApp = () => {
           zIndex: 20,
         }}
       >
-        <AnimatedMenu />
+        <AnimatedMenu
+          rotate={rotate}
+          setRotate={setRotate}
+          controlId={controlId}
+          sessionId={sessionId}
+          sendRotateCall={sendRotateCall}
+        />
       </Box>
 
-      <ProductView>
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#f0f0f0",
+        }}
+      >
         <Box
           sx={{
             flex: 1,
@@ -391,7 +452,7 @@ const MobileDrawerApp = () => {
             <ConfigureOptions
               onClose={() => setOptionsOpen(false)}
               isOptionsOpen={isOptionsOpen}
-              selectedItem={selectedItem[0]} // Pass the first item of selectedItem
+              selectedItem={selectedItem[0]}
               sessionId={sessionId}
             />
           )}
@@ -413,13 +474,13 @@ const MobileDrawerApp = () => {
             />
           )}
         </Box>
-      </ProductView>
+      </Box>
 
       {/* Right-side Button */}
       <Box
         sx={{
           position: "fixed",
-          bottom: isOptionsOpen ? `calc(${drawerHeight} + 5vh)` : "6vh", // Dynamically positioned based on drawer height
+          bottom: isOptionsOpen ? `calc(${drawerHeight} + 10vh)` : "6vh", // Dynamically positioned based on drawer height
           right: "2px", // Add some margin for better view on mobile
           color: "white",
           padding: "8px",
@@ -442,7 +503,7 @@ const MobileDrawerApp = () => {
         <Box
           sx={{
             position: "fixed",
-            bottom: isOptionsOpen ? `calc(${drawerHeight} + 5vh)` : "6vh", // Dynamically positioned based on drawer height
+            bottom: isOptionsOpen ? `calc(${drawerHeight} + 10vh)` : "6vh", // Dynamically positioned based on drawer height
             left: "2px", // Better padding for small screens
             padding: "8px",
             display: "flex",
@@ -450,8 +511,11 @@ const MobileDrawerApp = () => {
             zIndex: 12,
           }}
         >
-          <LocalMallIcon />
-          <WorkIcon />
+          <Views
+            viewActionData={viewActionData}
+            sessionId={sessionId}
+            collectionActionData={collectionActionData}
+          />
         </Box>
       )}
 
