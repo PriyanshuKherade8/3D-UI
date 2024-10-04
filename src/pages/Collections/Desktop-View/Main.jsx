@@ -27,6 +27,7 @@ import {
 } from "../services";
 import io from "socket.io-client";
 import useSocket from "../../../hooks/useSocketMessages";
+import { useParams } from "react-router-dom";
 
 const Toolbar = ({
   rotate,
@@ -225,8 +226,8 @@ const Main = () => {
   const handleIconClick = () => {
     setShowNewPaper(true);
   };
-
-  const { data } = useGetExperienceDataById();
+  const { id } = useParams();
+  const { data } = useGetExperienceDataById(id);
   console.log("allData", data?.data);
   const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
   const collectionActionData = data?.data?.experience?.collection;
