@@ -1,22 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
-
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 const DrawerContainer = styled.div`
   position: relative;
-  height: 100vh;
-  overflow: hidden; /* Ensure no scrolling beyond 100vh */
+  height: 20vh;
+  overflow: hidden;
 `;
 
 const Drawer = styled.div`
-  position: absolute;
-  bottom: -300px; /* Adjust based on your drawer height */
+  position: fixed;
+  bottom: -200px;
   left: 0;
   right: 0;
-  height: 300px;
+  height: 200px;
   background: white;
   border-radius: 10px 10px 0 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   transition: bottom 0.3s ease;
+  z-index: 20;
 
   ${({ isOpen }) =>
     isOpen &&
@@ -29,20 +30,19 @@ const DrawerContent = styled.div`
   padding: 16px;
 `;
 
-// The swipeable area (visible when drawer is closed)
 const SwipeableArea = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
-  height: 10vh; /* Visible area when the drawer is closed */
+  height: 5vh;
   background: lightgray;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 10; /* Keep above other content */
+  z-index: 10;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
@@ -51,15 +51,12 @@ const BottomDrawer = () => {
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
 
-  // Disable scroll when the drawer is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-
-    // Cleanup when the component unmounts or the drawer state changes
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -77,11 +74,9 @@ const BottomDrawer = () => {
     const currentY = e.touches[0].clientY;
 
     if (isOpen && currentY > startY + 50) {
-      // Swiping down
-      setIsOpen(false);
+      setIsOpen(false); // Swiping down
     } else if (!isOpen && currentY < startY - 50) {
-      // Swiping up
-      setIsOpen(true);
+      setIsOpen(true); // Swiping up
     }
   };
 
@@ -93,7 +88,7 @@ const BottomDrawer = () => {
           onTouchMove={handleTouchMove}
           onClick={toggleDrawer}
         >
-          <h4>Swipe up to open</h4>
+          <HorizontalRuleIcon />
         </SwipeableArea>
       )}
       <Drawer
