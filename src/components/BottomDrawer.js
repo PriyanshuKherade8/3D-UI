@@ -43,7 +43,7 @@ const SwipeableArea = styled.div`
   right: 0;
   width: 100%;
   height: 5vh;
-  background: lightgray;
+  background: #e0e4e9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,23 +121,40 @@ const BottomDrawer = ({
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
             >
-              {isShowAll && (
-                <Box>
+              <Box
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  paddingLeft: "10px",
+                }}
+              >
+                {isShowAll && (
                   <Views
                     viewActionData={viewActionData}
                     sessionId={sessionId}
                     collectionActionData={collectionActionData}
                   />
-                </Box>
-              )}
-              <Button
-                variant="contained"
-                onClick={handleToggleDisplayComponent}
-                size="small"
+                )}
+              </Box>
+              <Box
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  paddingRight: "10px",
+                }}
               >
-                {isShowAll ? "Show All Products" : "Configure"}
-              </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleToggleDisplayComponent}
+                  size="small"
+                >
+                  {isShowAll ? "Show All Products" : "Configure"}
+                </Button>
+              </Box>
             </ButtonContainer>
+
             <HorizontalRuleIcon />
           </SwipeableArea>
         )}
@@ -152,22 +169,38 @@ const BottomDrawer = ({
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
             >
-              {isShowAll && (
-                <Box>
+              <Box
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  paddingLeft: "10px",
+                }}
+              >
+                {isShowAll && (
                   <Views
                     viewActionData={viewActionData}
                     sessionId={sessionId}
                     collectionActionData={collectionActionData}
                   />
-                </Box>
-              )}
-              <Button
-                variant="contained"
-                onClick={handleToggleDisplayComponent}
-                size="small"
+                )}
+              </Box>
+              <Box
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  paddingRight: "10px",
+                }}
               >
-                {isShowAll ? "Show All Products" : "Configure"}
-              </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleToggleDisplayComponent}
+                  size="small"
+                >
+                  {isShowAll ? "Show All Products" : "Configure"}
+                </Button>
+              </Box>
             </ButtonContainer>
           )}
           <DrawerContent>

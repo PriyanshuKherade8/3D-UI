@@ -31,7 +31,6 @@ const ConfigureOptions = ({
   selectedItem,
   sessionId,
 }) => {
-  console.log("kkk", selectedItem);
   const [selectedTab, setSelectedTab] = useState(0);
 
   const properties = selectedItem?.product?.property || [];
@@ -75,7 +74,7 @@ const ConfigureOptions = ({
       }}
     >
       <Box sx={{ marginBottom: "16px" }}>
-        <Typography variant="subtitle2">Selected Item</Typography>
+        <Typography variant="subtitle2">{selectedItem?.title}</Typography>
 
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
@@ -103,21 +102,28 @@ const ConfigureOptions = ({
                       );
                     }}
                   >
-                    {variantIcon && (
-                      <img
-                        src={variantIcon.path}
-                        alt={variant.variant_name}
-                        style={{
-                          // borderRadius: "50%",
-                          height: "30px",
-                          width: "30px",
-                        }}
-                      />
-                    )}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      {variantIcon && (
+                        <img
+                          src={variantIcon.path}
+                          alt={variant.variant_name}
+                          style={{
+                            height: "30px",
+                            width: "30px",
+                          }}
+                        />
+                      )}
 
-                    <Typography variant="caption">
-                      {selectedItem.title}
-                    </Typography>
+                      <Typography variant="caption" sx={{ marginTop: "8px" }}>
+                        {selectedItem.title}
+                      </Typography>
+                    </Box>
                   </VariantItem>
                 );
               })}
