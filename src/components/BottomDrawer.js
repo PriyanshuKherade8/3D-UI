@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import { Box } from "@mui/material";
+import ItemCard from "../pages/Collections/Mobile-View/Components/ItemCard";
+import ShowAllProductsOptions from "../pages/Collections/Mobile-View/Components/ShowAllProductsOptions";
 const DrawerContainer = styled.div`
   position: relative;
   height: 20vh;
@@ -46,7 +49,15 @@ const SwipeableArea = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
-const BottomDrawer = () => {
+const BottomDrawer = ({
+  setSelectedIndex,
+  initialCardItems,
+  selectedIndex,
+  isDisplayComponent,
+  setOptionsOpen,
+  isOptionsOpen,
+  setShowAll,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
@@ -98,8 +109,24 @@ const BottomDrawer = () => {
         onTouchMove={handleTouchMove}
       >
         <DrawerContent>
-          <h2>Bottom Drawer Content</h2>
-          <p>Your content goes here.</p>
+          <Box sx={{ width: "100%" }}>
+            {isDisplayComponent && (
+              <ShowAllProductsOptions
+                isOptionsOpen={isOptionsOpen}
+                items={initialCardItems?.map((item, index) => ({
+                  image: item.image,
+                  title: item.title,
+                  isSelected: selectedIndex === index,
+                  onClick: () => {
+                    setSelectedIndex(index);
+                    setShowAll(false);
+                    setOptionsOpen(true);
+                  },
+                }))}
+                onClose={() => setOptionsOpen(false)}
+              />
+            )}
+          </Box>
         </DrawerContent>
       </Drawer>
     </DrawerContainer>
