@@ -1,10 +1,39 @@
 import { Box, IconButton, Paper, Tooltip } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSetProductChangeCall } from "../../services";
 
 const Views = ({ viewActionData, sessionId, collectionActionData }) => {
-  const [selectedView, setSelectedView] = useState(null);
   const { mutate: changeViewCall } = useSetProductChangeCall();
+
+  const defaultView = viewActionData?.find((view) => view.is_default) || null;
+
+  const [selectedView, setSelectedView] = useState(
+    defaultView ? defaultView.view_id : null
+  );
+
+  useEffect(() => {
+    if (defaultView) {
+      const item = collectionActionData?.items?.[0];
+      if (!item) {
+        console.error("No item found in collectionActionData");
+        return;
+      }
+
+      const viewPayload = {
+        session_id: sessionId,
+        message: {
+          type: "change_view",
+          message: {
+            item_id: item.item_id,
+            product_key: item.product.product_key,
+            view_id: defaultView.view_id,
+          },
+        },
+      };
+
+      changeViewCall(viewPayload);
+    }
+  }, [defaultView, sessionId, collectionActionData, changeViewCall]);
 
   const handleViewChange = (view) => {
     setSelectedView(view.view_id);
@@ -65,7 +94,11 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
                   transition: "background-color 0.3s ease",
                   borderRadius: "8px",
                   backgroundColor:
-                    selectedView === view.view_id ? "#007AFF" : "transparent",
+                    selectedView === view.view_id
+                      ? view.is_default
+                        ? "white"
+                        : "#007AFF"
+                      : "transparent",
                   color: selectedView === view.view_id ? "#fff" : "#000",
                   "&:hover": {
                     backgroundColor:
