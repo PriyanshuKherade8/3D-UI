@@ -6,7 +6,7 @@ export const useGetExperienceDataById = (id) => {
     queryKey: ["experience", id],
     queryFn: () =>
       httpClientForIframe.get(`/get_experience`, {
-        params: { experience: id ? id : "EXP1000000038" },
+        params: { experience: id },
       }),
   });
   return { data, error, isLoading };

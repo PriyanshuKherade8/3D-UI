@@ -6,6 +6,7 @@ import BottomDrawer from "../../../components/BottomDrawer";
 import AnimatedMenu from "./Components/AnimatedMenu";
 import useSocket from "../../../hooks/useSocketMessages";
 import { io } from "socket.io-client";
+import { useParams } from "react-router-dom";
 
 const MobileMain = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -13,8 +14,8 @@ const MobileMain = () => {
   const [isDisplayComponent, setIsDisplayComponent] = useState(true);
   const [isShowAll, setShowAll] = useState(false);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-
-  const { data } = useGetExperienceDataById();
+  const { id } = useParams();
+  const { data } = useGetExperienceDataById(id);
   const productList = data?.data?.experience?.collection?.items;
   console.log("productList", productList);
 
