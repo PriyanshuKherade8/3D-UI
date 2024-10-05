@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetExperienceDataById, useSetActionCall } from "../services";
 import { Box, Typography } from "@mui/material";
 import IframeResizer from "@iframe-resizer/react";
 import BottomDrawer from "../../../components/BottomDrawer";
 import AnimatedMenu from "./Components/AnimatedMenu";
+import useSocket from "../../../hooks/useSocketMessages";
+import { io } from "socket.io-client";
 
 const MobileMain = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isOptionsOpen, setOptionsOpen] = useState(false);
   const [isDisplayComponent, setIsDisplayComponent] = useState(true);
   const [isShowAll, setShowAll] = useState(false);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
 
   const { data } = useGetExperienceDataById();
   const productList = data?.data?.experience?.collection?.items;
@@ -60,6 +63,30 @@ const MobileMain = () => {
   const [rotate, setRotate] = useState(false);
   const controlId = getData?.experience?.controls?.[0]?.control_id;
   const { mutate: sendRotateCall } = useSetActionCall();
+  const URL = "http://143.110.186.134";
+  const socket = io(URL, { autoConnect: false });
+  const { currProductKey, chapterList, currPlayMode, currActId, currItemId } =
+    useSocket(socket);
+
+  const selectedItem =
+    selectedIndex !== null
+      ? [initialCardItems[selectedIndex]]
+      : initialCardItems?.find((item) => item.item_id === currItemId)
+      ? [initialCardItems?.find((item) => item.item_id === currItemId)]
+      : [];
+
+  const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
+  const collectionActionData = data?.data?.experience?.collection;
+
+  useEffect(() => {
+    if (!isSocketConnected && sessionId) {
+      console.log("sessionId on canvas", sessionId);
+      socket.auth = { sessionId };
+      socket.connect();
+      setIsSocketConnected(true);
+    }
+  }, [sessionId]);
+
   return (
     <Box
       sx={{
@@ -102,6 +129,10 @@ const MobileMain = () => {
           setShowAll={setShowAll}
           isShowAll={isShowAll}
           handleToggleDisplayComponent={handleToggleDisplayComponent}
+          sessionId={sessionId}
+          selectedItem={selectedItem}
+          collectionActionData={collectionActionData}
+          viewActionData={viewActionData}
         />
       </Box>
 

@@ -388,8 +388,6 @@ const MobileDrawerApp = () => {
       ? [initialCardItems?.find((item) => item.item_id === currItemId)]
       : [];
 
-  console.log("selectedItem", selectedItem);
-
   const payloadForItemChange = {
     session_id: sessionId,
     message: {

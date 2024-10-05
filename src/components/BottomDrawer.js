@@ -4,6 +4,8 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { Box, Button } from "@mui/material";
 import ItemCard from "../pages/Collections/Mobile-View/Components/ItemCard";
 import ShowAllProductsOptions from "../pages/Collections/Mobile-View/Components/ShowAllProductsOptions";
+import ConfigureOptions from "../pages/Collections/Mobile-View/Components/ConfigureOptions";
+import Views from "../pages/Collections/Mobile-View/Components/Views";
 
 const DrawerContainer = styled.div`
   position: relative;
@@ -56,7 +58,6 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: absolute;
   top: -42px; /* Adjust position to be just above the drawer */
-  border: 1px solid red;
 `;
 
 const BottomDrawer = ({
@@ -69,6 +70,10 @@ const BottomDrawer = ({
   setShowAll,
   handleToggleDisplayComponent,
   isShowAll,
+  sessionId,
+  selectedItem,
+  viewActionData,
+  collectionActionData,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -112,10 +117,19 @@ const BottomDrawer = ({
             onTouchMove={handleTouchMove}
             onClick={toggleDrawer}
           >
-            <ButtonContainer>
-              <Button variant="contained" color="primary">
-                Button 3
-              </Button>
+            <ButtonContainer
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              {isShowAll && (
+                <Box>
+                  <Views
+                    viewActionData={viewActionData}
+                    sessionId={sessionId}
+                    collectionActionData={collectionActionData}
+                  />
+                </Box>
+              )}
               <Button
                 variant="contained"
                 onClick={handleToggleDisplayComponent}
@@ -134,10 +148,19 @@ const BottomDrawer = ({
           onTouchMove={handleTouchMove}
         >
           {isOpen === true && (
-            <ButtonContainer>
-              <Button variant="contained" color="primary">
-                Button 1
-              </Button>
+            <ButtonContainer
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              {isShowAll && (
+                <Box>
+                  <Views
+                    viewActionData={viewActionData}
+                    sessionId={sessionId}
+                    collectionActionData={collectionActionData}
+                  />
+                </Box>
+              )}
               <Button
                 variant="contained"
                 onClick={handleToggleDisplayComponent}
@@ -163,6 +186,15 @@ const BottomDrawer = ({
                     },
                   }))}
                   onClose={() => setOptionsOpen(false)}
+                />
+              )}
+
+              {!isDisplayComponent && (
+                <ConfigureOptions
+                  onClose={() => setOptionsOpen(false)}
+                  isOptionsOpen={isOptionsOpen}
+                  selectedItem={selectedItem[0]}
+                  sessionId={sessionId}
                 />
               )}
             </Box>
