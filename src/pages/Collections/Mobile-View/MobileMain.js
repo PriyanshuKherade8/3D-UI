@@ -101,6 +101,7 @@ const MobileMain = () => {
           setOptionsOpen={setOptionsOpen}
           setShowAll={setShowAll}
           isShowAll={isShowAll}
+          handleToggleDisplayComponent={handleToggleDisplayComponent}
         />
       </Box>
 

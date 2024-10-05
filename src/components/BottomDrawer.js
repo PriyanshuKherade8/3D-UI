@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import ItemCard from "../pages/Collections/Mobile-View/Components/ItemCard";
 import ShowAllProductsOptions from "../pages/Collections/Mobile-View/Components/ShowAllProductsOptions";
+
 const DrawerContainer = styled.div`
   position: relative;
   height: 20vh;
@@ -49,6 +50,15 @@ const SwipeableArea = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  position: absolute;
+  top: -42px; /* Adjust position to be just above the drawer */
+  border: 1px solid red;
+`;
+
 const BottomDrawer = ({
   setSelectedIndex,
   initialCardItems,
@@ -57,6 +67,8 @@ const BottomDrawer = ({
   setOptionsOpen,
   isOptionsOpen,
   setShowAll,
+  handleToggleDisplayComponent,
+  isShowAll,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -92,44 +104,72 @@ const BottomDrawer = ({
   };
 
   return (
-    <DrawerContainer>
-      {!isOpen && (
-        <SwipeableArea
+    <>
+      <DrawerContainer>
+        {!isOpen && (
+          <SwipeableArea
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onClick={toggleDrawer}
+          >
+            <ButtonContainer>
+              <Button variant="contained" color="primary">
+                Button 3
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleToggleDisplayComponent}
+                size="small"
+              >
+                {isShowAll ? "Show All Products" : "Configure"}
+              </Button>
+            </ButtonContainer>
+            <HorizontalRuleIcon />
+          </SwipeableArea>
+        )}
+        <Drawer
+          isOpen={isOpen}
+          ref={drawerRef}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          onClick={toggleDrawer}
         >
-          <HorizontalRuleIcon />
-        </SwipeableArea>
-      )}
-      <Drawer
-        isOpen={isOpen}
-        ref={drawerRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-      >
-        <DrawerContent>
-          <Box sx={{ width: "100%" }}>
-            {isDisplayComponent && (
-              <ShowAllProductsOptions
-                isOptionsOpen={isOptionsOpen}
-                items={initialCardItems?.map((item, index) => ({
-                  image: item.image,
-                  title: item.title,
-                  isSelected: selectedIndex === index,
-                  onClick: () => {
-                    setSelectedIndex(index);
-                    setShowAll(false);
-                    setOptionsOpen(true);
-                  },
-                }))}
-                onClose={() => setOptionsOpen(false)}
-              />
-            )}
-          </Box>
-        </DrawerContent>
-      </Drawer>
-    </DrawerContainer>
+          {isOpen === true && (
+            <ButtonContainer>
+              <Button variant="contained" color="primary">
+                Button 1
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleToggleDisplayComponent}
+                size="small"
+              >
+                {isShowAll ? "Show All Products" : "Configure"}
+              </Button>
+            </ButtonContainer>
+          )}
+          <DrawerContent>
+            <Box sx={{ width: "100%" }}>
+              {isDisplayComponent && (
+                <ShowAllProductsOptions
+                  isOptionsOpen={isOptionsOpen}
+                  items={initialCardItems?.map((item, index) => ({
+                    image: item.image,
+                    title: item.title,
+                    isSelected: selectedIndex === index,
+                    onClick: () => {
+                      setSelectedIndex(index);
+                      setShowAll(false);
+                      setOptionsOpen(true);
+                    },
+                  }))}
+                  onClose={() => setOptionsOpen(false)}
+                />
+              )}
+            </Box>
+          </DrawerContent>
+        </Drawer>
+      </DrawerContainer>
+    </>
   );
 };
 
