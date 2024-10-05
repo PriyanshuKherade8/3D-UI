@@ -67,7 +67,7 @@ const ConfigureOptions = ({
         overflow: "hidden",
         height: "100%",
         padding: "16px",
-        backgroundColor: "#fff",
+        backgroundColor: "#F4F4F4",
         // position: "absolute",
         zIndex: 1,
         transition: "bottom 0.3s ease",

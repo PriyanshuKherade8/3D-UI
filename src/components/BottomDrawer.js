@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { Box, Button } from "@mui/material";
+import GridViewIcon from "@mui/icons-material/GridView"; // Example icon
 import ItemCard from "../pages/Collections/Mobile-View/Components/ItemCard";
 import ShowAllProductsOptions from "../pages/Collections/Mobile-View/Components/ShowAllProductsOptions";
 import ConfigureOptions from "../pages/Collections/Mobile-View/Components/ConfigureOptions";
 import Views from "../pages/Collections/Mobile-View/Components/Views";
 
+// Styled Components
 const DrawerContainer = styled.div`
   position: relative;
   height: 20vh;
@@ -18,10 +20,9 @@ const Drawer = styled.div`
   bottom: -200px;
   left: 0;
   right: 0;
-  height: 200px;
   background: white;
   border-radius: 10px 10px 0 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   transition: bottom 0.3s ease;
   z-index: 20;
 
@@ -33,7 +34,8 @@ const Drawer = styled.div`
 `;
 
 const DrawerContent = styled.div`
-  padding: 16px;
+  padding: 6px;
+  background: #f4f4f4;
 `;
 
 const SwipeableArea = styled.div`
@@ -43,13 +45,13 @@ const SwipeableArea = styled.div`
   right: 0;
   width: 100%;
   height: 5vh;
-  background: #e0e4e9;
+  background: #f4f4f4;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
 const ButtonContainer = styled.div`
@@ -58,6 +60,30 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: absolute;
   top: -42px; /* Adjust position to be just above the drawer */
+`;
+
+// Styled Button Component
+const StyledButton = styled(Box)`
+  border-radius: 25px; /* Rounded border */
+  padding: 3px 20px;
+  text-transform: none; /* Keep the text in normal case */
+  font-weight: 650;
+  font-size: 14px;
+  // font-family: system-ui;
+  color: #333333; /* Text color */
+  border: 1px solid #d1d1d1; /* Border color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background-color: white;
+  height: ${({ isOpen }) => (isOpen ? "40px" : "30px")};
+
+  &:hover {
+    background-color: #f5f5f5; /* Background color on hover */
+    border-color: #c1c1c1;
+  }
 `;
 
 const BottomDrawer = ({
@@ -145,13 +171,14 @@ const BottomDrawer = ({
                   paddingRight: "10px",
                 }}
               >
-                <Button
-                  variant="contained"
+                <StyledButton
+                  variant="outlined"
+                  startIcon={<GridViewIcon />} // Icon
                   onClick={handleToggleDisplayComponent}
                   size="small"
                 >
                   {isShowAll ? "Show All Products" : "Configure"}
-                </Button>
+                </StyledButton>
               </Box>
             </ButtonContainer>
 
@@ -193,13 +220,14 @@ const BottomDrawer = ({
                   paddingRight: "10px",
                 }}
               >
-                <Button
-                  variant="contained"
+                <StyledButton
+                  variant="outlined"
+                  startIcon={<GridViewIcon />} // Icon
                   onClick={handleToggleDisplayComponent}
                   size="small"
                 >
                   {isShowAll ? "Show All Products" : "Configure"}
-                </Button>
+                </StyledButton>
               </Box>
             </ButtonContainer>
           )}

@@ -1,4 +1,4 @@
-import { Box, Slide, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
   console.log("items11", items),
@@ -9,8 +9,8 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
         flexDirection: "column",
         overflow: "hidden",
         height: "100%",
-        padding: "16px",
-        backgroundColor: "#fff",
+        padding: "6px",
+        backgroundColor: "#F4F4F4",
         zIndex: 1,
         transition: "bottom 0.3s ease",
       }}
@@ -43,32 +43,45 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
                 alignItems: "center",
                 cursor: "pointer",
                 padding: "4px",
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 borderRadius: "8px",
               }}
             >
               <Box
-                component="img"
-                src={image}
-                alt={title}
                 sx={{
-                  height: "50px",
-                  width: "50px",
-                  objectFit: "cover",
-                  border: isSelected ? "2px solid #007AFF" : "none",
-                }}
-              />
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  fontFamily: "Urbanist",
-                  color: isSelected ? "#007AFF" : "black",
-                  marginTop: "8px",
+                  height: "100px",
+                  width: "100px",
+                  border: isSelected ? "1px solid #007AFF" : "none",
+                  backgroundColor: isSelected ? "white" : "#F4F4F4",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                {title}
-              </Typography>
+                <Box
+                  component="img"
+                  src={image}
+                  alt={title}
+                  sx={{
+                    height: "60px",
+                    width: "50px",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    fontFamily: "Urbanist",
+                    color: isSelected ? "#007AFF" : "black",
+                    marginTop: "8px",
+                  }}
+                >
+                  {title}
+                </Typography>
+              </Box>
             </Box>
           ))}
         </Box>
