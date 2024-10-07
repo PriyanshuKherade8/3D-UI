@@ -66,9 +66,15 @@ const MobileMain = () => {
   const { mutate: sendRotateCall } = useSetActionCall();
   const URL = "http://143.110.186.134";
   const socket = io(URL, { autoConnect: false });
-  const { currProductKey, chapterList, currPlayMode, currActId, currItemId } =
-    useSocket(socket);
-
+  const {
+    currProductKey,
+    chapterList,
+    currPlayMode,
+    currActId,
+    currItemId,
+    currVariant,
+  } = useSocket(socket);
+  console.log("currVariant", currVariant);
   const selectedItem =
     selectedIndex !== null
       ? [initialCardItems[selectedIndex]]
@@ -134,6 +140,7 @@ const MobileMain = () => {
           selectedItem={selectedItem}
           collectionActionData={collectionActionData}
           viewActionData={viewActionData}
+          currVariant={currVariant}
         />
       </Box>
 

@@ -1,5 +1,5 @@
 import { Box, styled, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSetActionCall } from "../../services";
 
 const ScrollableContainer = styled(Box)(({ theme }) => ({
@@ -30,10 +30,20 @@ const ConfigureOptions = ({
   isOptionsOpen,
   selectedItem,
   sessionId,
+  currVariant,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const properties = selectedItem?.product?.property || [];
+
+  useEffect(() => {
+    if (currVariant?.variant_id) {
+      setSelectedVariantId(currVariant.variant_id);
+    } else if (properties.length > 0 && !selectedVariantId) {
+      const firstVariant = properties[0]?.variants[0]?.variant_id;
+      setSelectedVariantId(firstVariant);
+    }
+  }, [currVariant, properties, selectedVariantId]);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -41,9 +51,8 @@ const ConfigureOptions = ({
 
   const { mutate: variantChange } = useSetActionCall();
   const productKey = selectedItem?.product?.product_key;
-  console.log("productKey", productKey);
+
   const handleVariantChange = (propertyId, variant) => {
-    console.log("propertyId, variant", propertyId, variant);
     setSelectedVariantId(variant.variant_id);
     const payload = {
       session_id: sessionId,
@@ -56,7 +65,6 @@ const ConfigureOptions = ({
         },
       },
     };
-
     variantChange(payload);
   };
 
@@ -67,26 +75,14 @@ const ConfigureOptions = ({
         flexDirection: "column",
         overflow: "hidden",
         height: "100%",
-        padding: "16px",
+        padding: "5px",
         backgroundColor: "#F4F4F4",
-        // position: "absolute",
         zIndex: 1,
         transition: "bottom 0.3s ease",
       }}
     >
-      <Box sx={{ marginBottom: "16px" }}>
-        <Typography
-          variant="subtitle2"
-          style={{
-            fontSize: "20px",
-            fontWeight: "500",
-            font: "Urbanist",
-            height: "24px",
-            marginBottom: "6px",
-          }}
-        >
-          {selectedItem?.title}
-        </Typography>
+      <Box>
+        <Box> {selectedItem?.title}</Box>
 
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
@@ -101,7 +97,7 @@ const ConfigureOptions = ({
 
         {/* Variants for selected tab */}
         {properties[selectedTab] && (
-          <Box sx={{ marginTop: "16px" }}>
+          <Box>
             <ScrollableContainer>
               {properties[selectedTab].variants.map((variant) => {
                 const variantIcon = variant.variant_icons.find(
@@ -144,6 +140,7 @@ const ConfigureOptions = ({
                             style={{
                               height: "62px",
                               width: "62px",
+                              borderRadius: "50%",
                             }}
                           />
                         )}
@@ -152,7 +149,7 @@ const ConfigureOptions = ({
                       <Typography
                         variant="caption"
                         sx={{
-                          marginTop: "8px",
+                          // marginTop: "8px",
                           fontSize: "14px",
                           fontWeight: "450",
                           fontFamily: "Urbanist",

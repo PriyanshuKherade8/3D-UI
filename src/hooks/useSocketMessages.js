@@ -6,6 +6,7 @@ const useSocket = (socket) => {
   const [currPlayMode, setCurrPlayMode] = useState();
   const [currActId, setCurrActId] = useState();
   const [currItemId, setCurrItemId] = useState();
+  const [currVariant, setCurrVariant] = useState();
 
   socket.on("message", (data) => {
     console.log("ddd", data);
@@ -25,6 +26,9 @@ const useSocket = (socket) => {
       case "curr_item_id":
         setCurrItemId(data.message.message);
         break;
+      case "change_variant":
+        setCurrVariant(data.message.message);
+        break;
       //   case "is_loaded":
       //     setIsLoadingScreen(false);
       //     break;
@@ -35,7 +39,14 @@ const useSocket = (socket) => {
     setCurrPlayMode(data.curr_play_mode);
   });
 
-  return { currProductKey, chapterList, currPlayMode, currActId, currItemId };
+  return {
+    currProductKey,
+    chapterList,
+    currPlayMode,
+    currActId,
+    currItemId,
+    currVariant,
+  };
 };
 
 export default useSocket;

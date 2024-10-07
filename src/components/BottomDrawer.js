@@ -109,6 +109,7 @@ const BottomDrawer = ({
   selectedItem,
   viewActionData,
   collectionActionData,
+  currVariant,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -283,6 +284,7 @@ const BottomDrawer = ({
                   isOptionsOpen={isOptionsOpen}
                   selectedItem={selectedItem[0]}
                   sessionId={sessionId}
+                  currVariant={currVariant}
                 />
               )}
             </Box>
