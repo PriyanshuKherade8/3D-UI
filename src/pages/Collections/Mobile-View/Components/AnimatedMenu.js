@@ -2,28 +2,24 @@ import React, { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import styled from "styled-components";
 import { Turn as Hamburger } from "hamburger-react";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RedoIcon from "@mui/icons-material/Redo";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
-const MenuContainer = styled(Box)`
+const SidebarContainer = styled(Box)`
   position: fixed;
-  top: 15%; /* Position of the menu */
+  top: 5%;
   left: 10px;
-  background-color: white;
+  background-color: #f4f4f4;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5px;
-  overflow: hidden;
-  height: ${({ open }) => (open ? "" : "0")}; /* Height transition */
-  opacity: ${({ open }) => (open ? 1 : 0)}; /* Opacity transition */
-  transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
+  transition: width 0.5s ease-in-out;
+  width: ${({ open }) =>
+    open ? "48px" : "48px"}; /* Expanded or collapsed width */
+  height: ${({ open }) => (open ? "auto" : "48px")}; /* Expands to show icons */
 `;
 
 const IconButtonStyled = styled(IconButton)`
@@ -34,12 +30,7 @@ const IconButtonStyled = styled(IconButton)`
 `;
 
 const HamburgerContainer = styled(Box)`
-  position: fixed;
-  top: 5%;
-  left: 10px;
-  z-index: 1100; /* Ensure it's above the menu */
-  background-color: white;
-  border-radius: 10px;
+  z-index: 1100;
 `;
 
 const AnimatedMenu = ({
@@ -71,7 +62,7 @@ const AnimatedMenu = ({
   };
 
   return (
-    <>
+    <SidebarContainer open={open}>
       <HamburgerContainer>
         <Hamburger
           toggled={open}
@@ -81,22 +72,17 @@ const AnimatedMenu = ({
         />
       </HamburgerContainer>
 
-      {/* Menu that opens when toggled */}
-      <MenuContainer open={open}>
-        <IconButtonStyled visible={open}>
-          <RedoIcon onClick={handleRotate} />
-        </IconButtonStyled>
-        {/* <IconButtonStyled visible={open}>
-          <RefreshIcon />
-        </IconButtonStyled>
-        <IconButtonStyled visible={open}>
-          <OpenInFullIcon />
-        </IconButtonStyled>
-        <IconButtonStyled visible={open}>
-          <ExpandMoreIcon />
-        </IconButtonStyled> */}
-      </MenuContainer>
-    </>
+      {open && (
+        <>
+          <IconButtonStyled visible={open} onClick={handleRotate}>
+            <RedoIcon />
+          </IconButtonStyled>
+          <IconButtonStyled visible={open}>
+            <RefreshIcon />
+          </IconButtonStyled>
+        </>
+      )}
+    </SidebarContainer>
   );
 };
 
