@@ -32,7 +32,7 @@ const ConfigureOptions = ({
   sessionId,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
-
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
   const properties = selectedItem?.product?.property || [];
 
   const handleChange = (event, newValue) => {
@@ -44,6 +44,7 @@ const ConfigureOptions = ({
   console.log("productKey", productKey);
   const handleVariantChange = (propertyId, variant) => {
     console.log("propertyId, variant", propertyId, variant);
+    setSelectedVariantId(variant.variant_id);
     const payload = {
       session_id: sessionId,
       message: {
@@ -74,12 +75,27 @@ const ConfigureOptions = ({
       }}
     >
       <Box sx={{ marginBottom: "16px" }}>
-        <Typography variant="subtitle2">{selectedItem?.title}</Typography>
+        <Typography
+          variant="subtitle2"
+          style={{
+            fontSize: "20px",
+            fontWeight: "500",
+            font: "Urbanist",
+            height: "24px",
+            marginBottom: "6px",
+          }}
+        >
+          {selectedItem?.title}
+        </Typography>
 
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
           {properties.map((property, index) => (
-            <Tab key={property.property_id} label={property.property_name} />
+            <Tab
+              key={property.property_id}
+              label={property.property_name}
+              style={{ fontWeight: "450" }}
+            />
           ))}
         </Tabs>
 
@@ -94,7 +110,6 @@ const ConfigureOptions = ({
                 return (
                   <VariantItem
                     key={variant?.variant_id}
-                    isSelected={false}
                     onClick={() => {
                       handleVariantChange(
                         properties[selectedTab].property_id,
@@ -109,18 +124,40 @@ const ConfigureOptions = ({
                         alignItems: "center",
                       }}
                     >
-                      {variantIcon && (
-                        <img
-                          src={variantIcon.path}
-                          alt={variant.variant_name}
-                          style={{
-                            height: "30px",
-                            width: "30px",
-                          }}
-                        />
-                      )}
+                      <Box
+                        style={{
+                          width: "78px",
+                          height: "78px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          border:
+                            variant?.variant_id === selectedVariantId
+                              ? "1px solid #007AFF"
+                              : "1px solid transparent",
+                        }}
+                      >
+                        {variantIcon && (
+                          <img
+                            src={variantIcon.path}
+                            alt={variant.variant_name}
+                            style={{
+                              height: "62px",
+                              width: "62px",
+                            }}
+                          />
+                        )}
+                      </Box>
 
-                      <Typography variant="caption" sx={{ marginTop: "8px" }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          marginTop: "8px",
+                          fontSize: "14px",
+                          fontWeight: "450",
+                          fontFamily: "Urbanist",
+                        }}
+                      >
                         {selectedItem.title}
                       </Typography>
                     </Box>
