@@ -131,6 +131,7 @@ const ConfigureOptions = ({
                             variant?.variant_id === selectedVariantId
                               ? "1px solid #007AFF"
                               : "1px solid transparent",
+                          borderRadius: "50%",
                         }}
                       >
                         {variantIcon && (
