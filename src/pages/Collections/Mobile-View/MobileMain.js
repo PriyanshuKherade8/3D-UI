@@ -25,9 +25,9 @@ const MobileMain = () => {
       (icon) => icon.file_type === "L"
     )?.path;
     return {
-      image: image || "https://i.ibb.co/2sGqztG/2.jpg",
-      // image: image || "",
+      image: image || "",
       title: product.item_display_short_title || "Untitled",
+      long_title: product?.item_display_long_title,
       product_id: product?.product?.product_id,
       product: product?.product,
       item_id: product?.item_id,

@@ -67,7 +67,7 @@ const ConfigureOptions = ({
     };
     variantChange(payload);
   };
-
+  console.log("selectedItem", selectedItem);
   return (
     <Box
       sx={{
@@ -82,7 +82,7 @@ const ConfigureOptions = ({
       }}
     >
       <Box>
-        <Box> {selectedItem?.title}</Box>
+        <Box> {selectedItem?.long_title}</Box>
 
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
@@ -156,7 +156,7 @@ const ConfigureOptions = ({
                           fontFamily: "Urbanist",
                         }}
                       >
-                        {selectedItem.title}
+                        {variant.variant_name}
                       </Typography>
                     </Box>
                   </VariantItem>
