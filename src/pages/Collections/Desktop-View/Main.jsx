@@ -395,7 +395,6 @@ const Main = () => {
             position: "relative",
             display: "flex",
             flexDirection: "column",
-            border: "1px solid red", // Border to identify the section
           }}
         >
           <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
@@ -448,7 +447,6 @@ const Main = () => {
                 justifyContent: "center",
                 boxShadow: "0 0 10px rgba(0,0,0,0.3)",
                 cursor: "pointer",
-                border: "1px solid red",
               }}
               onClick={() => {
                 handleIconClick();
@@ -498,7 +496,6 @@ const Main = () => {
             right: "0",
             height: "100%",
             zIndex: 1000,
-            border: "1px solid green",
           }}
         >
           <Paper elevation={3} style={{ height: "100%" }}>
