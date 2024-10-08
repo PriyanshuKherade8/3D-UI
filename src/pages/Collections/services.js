@@ -8,6 +8,7 @@ export const useGetExperienceDataById = (id) => {
       httpClientForIframe.get(`/get_experience`, {
         params: { experience: id },
       }),
+    refetchOnWindowFocus: false,
   });
   return { data, error, isLoading };
 };
