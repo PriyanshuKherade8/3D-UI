@@ -80,7 +80,7 @@ const Toolbar = ({
           </IconButton>
         </Paper>
       </Box>
-      <Box>
+      {/* <Box>
         <Paper elevation={3} sx={{ display: "flex", flexDirection: "column" }}>
           <IconButton>
             <RedoIcon />
@@ -95,7 +95,7 @@ const Toolbar = ({
             <CachedIcon />
           </IconButton>
         </Paper>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
@@ -227,6 +227,7 @@ const Main = () => {
   const [showAllProducts, setShowAllProducts] = useState(false);
 
   const [showNewPaper, setShowNewPaper] = useState(false);
+  const [showButtonsLayout, setShowButtonsLayout] = useState(false);
 
   const handleButtonClick = () => {
     setShowAllProducts((prev) => !prev);
@@ -331,7 +332,7 @@ const Main = () => {
             ? "75%"
             : "84%",
           height: "100vh", // Ensure full height
-          transition: "width 0.5s ease",
+          transition: "width 0.2s ease",
           display: "flex",
           flexDirection: "column",
         }}
@@ -345,37 +346,36 @@ const Main = () => {
             width="100%"
           />
         </Box>
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "5px",
-            }}
-          >
-            {showAllProducts && (
-              <Views
-                viewActionData={viewActionData}
-                sessionId={sessionId}
-                collectionActionData={collectionActionData}
-              />
-            )}
-          </Box>
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "5px",
-            }}
-          >
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handleButtonClick}
-            >
-              {showAllProducts ? "View All Products" : "Configure"}
-            </Button>
-          </Box>
+        {/* <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+
+            // border: "1px solid red",
+          }}
+        > */}
+        <Box
+          style={{
+            // display: "flex",
+            // justifyContent: "space-between",
+            // padding: "5px",
+            position: "fixed",
+            bottom: "0%",
+            left: "10px",
+            transform: "translateY(-50%)",
+            zIndex: 1000,
+            gap: "10px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {showAllProducts && (
+            <Views
+              viewActionData={viewActionData}
+              sessionId={sessionId}
+              collectionActionData={collectionActionData}
+            />
+          )}
         </Box>
       </Box>
 
@@ -390,11 +390,12 @@ const Main = () => {
               : isTablet
               ? "25%"
               : "16%",
-            height: "100vh", // Ensure full height
-            transition: "width 0.5s ease",
+            height: "100vh",
+            transition: "width 0.2s ease",
             position: "relative",
             display: "flex",
             flexDirection: "column",
+            border: "1px solid red", // Border to identify the section
           }}
         >
           <Paper elevation={3} style={{ padding: "10px", marginBottom: "3px" }}>
@@ -447,8 +448,12 @@ const Main = () => {
                 justifyContent: "center",
                 boxShadow: "0 0 10px rgba(0,0,0,0.3)",
                 cursor: "pointer",
+                border: "1px solid red",
               }}
-              onClick={handleIconClick}
+              onClick={() => {
+                handleIconClick();
+                setShowButtonsLayout(true);
+              }}
             >
               <ArrowForwardIosOutlinedIcon
                 sx={{
@@ -457,6 +462,29 @@ const Main = () => {
               />
             </Box>
           )}
+        </Box>
+      )}
+
+      {/* Button outside the bordered box, positioned bottom-right */}
+
+      {!showButtonsLayout && (
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "20px", // Position it slightly above the bottom
+            right: showAllProducts
+              ? isTablet
+                ? "41%"
+                : "36%"
+              : isTablet
+              ? "26%"
+              : "17%", // Align it to the left of the bordered box
+            zIndex: 1000,
+          }}
+        >
+          <Button variant="contained" size="small" onClick={handleButtonClick}>
+            {showAllProducts ? "View All Products" : "Configure"}
+          </Button>
         </Box>
       )}
 
@@ -470,6 +498,7 @@ const Main = () => {
             right: "0",
             height: "100%",
             zIndex: 1000,
+            border: "1px solid green",
           }}
         >
           <Paper elevation={3} style={{ height: "100%" }}>
@@ -496,8 +525,28 @@ const Main = () => {
                 onClick={() => {
                   setShowNewPaper(false);
                   setShowAllProducts(true);
+                  setShowButtonsLayout(false);
                 }}
               />
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: "20px", // Position it slightly above the bottom
+                right: "120%",
+                zIndex: 1000,
+              }}
+            >
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  handleButtonClick();
+                  setShowButtonsLayout(false);
+                }}
+              >
+                {showAllProducts ? "View All Products" : "Configure"}
+              </Button>
             </Box>
           </Paper>
         </Box>
