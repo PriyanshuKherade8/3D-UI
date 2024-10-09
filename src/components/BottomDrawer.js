@@ -58,6 +58,9 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: absolute;
   top: -42px;
+  border: 1px solid red;
+  overscroll-behavior: none;
+  overflow: hidden;
 `;
 
 const StyledButton = styled(Box)`
