@@ -13,6 +13,7 @@ const DrawerContainer = styled.div`
   position: relative;
   height: 20vh;
   overflow: hidden;
+  overscroll-behavior: none;
 `;
 
 const Drawer = styled.div`
@@ -50,6 +51,8 @@ const SwipeableArea = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 10;
+  overscroll-behavior: none;
+  overflow: hidden;
 `;
 
 const ButtonContainer = styled.div`
