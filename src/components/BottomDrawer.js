@@ -52,7 +52,7 @@ const SwipeableArea = styled.div`
   cursor: pointer;
   z-index: 10;
   overscroll-behavior: none;
-  overflow: hidden;
+  // overflow: hidden;
 `;
 
 const ButtonContainer = styled.div`
