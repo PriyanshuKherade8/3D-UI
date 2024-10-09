@@ -70,13 +70,13 @@ const StyledButton = styled(Box)`
   border: 1px solid #d1d1d1;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Keep icon and text on the same line */
+  justify-content: flex-start;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   background-color: white;
   height: ${({ isOpen }) => (isOpen ? "40px" : "30px")};
-  width: auto; /* Adjust width dynamically based on content */
-  white-space: nowrap; /* Prevent text from wrapping */
+  width: auto;
+  white-space: nowrap;
 
   &:hover {
     background-color: #f5f5f5;
@@ -84,14 +84,14 @@ const StyledButton = styled(Box)`
   }
 
   svg {
-    margin-right: 10px; /* Add space between the icon and the text */
-    flex-shrink: 0; /* Prevent icon from shrinking */
+    margin-right: 10px;
+    flex-shrink: 0;
   }
 
   span {
-    white-space: nowrap; /* Prevent text from wrapping */
-    text-align: left; /* Align text to the right of the icon */
-    flex-grow: 1; /* Ensure the text takes up the remaining space */
+    white-space: nowrap;
+    text-align: left;
+    flex-grow: 1;
   }
 `;
 
@@ -110,20 +110,21 @@ const BottomDrawer = ({
   viewActionData,
   collectionActionData,
   currVariant,
+  setIframeHeight, // New prop to control the iframe height
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
   const { mutate: changeProductCall } = useSetProductChangeCall();
+  console.log("isShowAll", isShowAll);
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setIframeHeight("80vh"); // Reduce iframe height when the drawer is open
     } else {
       document.body.style.overflow = "auto";
+      setIframeHeight("100vh"); // Full height when the drawer is closed
     }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, [isOpen]);
 
   const toggleDrawer = () => {
@@ -277,6 +278,12 @@ const BottomDrawer = ({
             <Box sx={{ width: "100%" }}>
               {isDisplayComponent && (
                 <ShowAllProductsOptions
+                  setSelectedIndex={setSelectedIndex}
+                  initialCardItems={initialCardItems}
+                  selectedIndex={selectedIndex}
+                  changeProductCall={changeProductCall}
+                  setShowAll={setShowAll}
+                  setOptionsOpen={setOptionsOpen}
                   isOptionsOpen={isOptionsOpen}
                   items={initialCardItems?.map((item, index) => ({
                     image: item.image,

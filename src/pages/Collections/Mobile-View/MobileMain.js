@@ -14,6 +14,7 @@ const MobileMain = () => {
   const [isDisplayComponent, setIsDisplayComponent] = useState(true);
   const [isShowAll, setShowAll] = useState(false);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [iframeHeight, setIframeHeight] = useState("100vh"); // New state for iframe height
   const { id } = useParams();
   const { data } = useGetExperienceDataById(id);
   const productList = data?.data?.experience?.collection?.items;
@@ -101,22 +102,22 @@ const MobileMain = () => {
         height: "100vh",
         position: "relative",
         overflow: "hidden",
-        overscrollBehavior: "none",
       }}
     >
       <IframeResizer
-        id="one"
+        id="iframe"
         src={url}
         scrolling="no"
-        height="100%"
-        width="100%"
         style={{
           position: "absolute",
           top: 0,
           left: 0,
-          zIndex: 1,
+          width: "100%",
+          height: iframeHeight,
+          transition: "height 0.3s ease",
         }}
       />
+
       <Box
         sx={{
           position: "absolute",
@@ -124,7 +125,6 @@ const MobileMain = () => {
           left: 0,
           right: 0,
           zIndex: 20,
-          background: "transparent",
         }}
       >
         <BottomDrawer
@@ -143,6 +143,7 @@ const MobileMain = () => {
           collectionActionData={collectionActionData}
           viewActionData={viewActionData}
           currVariant={currVariant}
+          setIframeHeight={setIframeHeight}
         />
       </Box>
 
