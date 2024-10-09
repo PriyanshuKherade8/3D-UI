@@ -7,6 +7,7 @@ import ConfigureOptions from "../pages/Collections/Mobile-View/Components/Config
 import Views from "../pages/Collections/Mobile-View/Components/Views";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ViewListIcon from "@mui/icons-material/ViewList";
+import { useSetProductChangeCall } from "../pages/Collections/services";
 
 // Styled Components
 const DrawerContainer = styled.div`
@@ -113,7 +114,7 @@ const BottomDrawer = ({
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
-
+  const { mutate: changeProductCall } = useSetProductChangeCall();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -142,6 +143,20 @@ const BottomDrawer = ({
       setIsOpen(true);
     }
   };
+
+  const payloadForItemChange = {
+    session_id: sessionId,
+    message: {
+      type: "change_item",
+      message: { item_id: selectedItem?.[0]?.item_id },
+    },
+  };
+
+  useEffect(() => {
+    if (selectedItem.length > 0) {
+      changeProductCall(payloadForItemChange);
+    }
+  }, [selectedIndex]);
 
   return (
     <>
