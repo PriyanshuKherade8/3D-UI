@@ -163,6 +163,8 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-start",
                   paddingLeft: "10px",
+                  overscrollBehavior: "none",
+                  overflow: "hidden",
                 }}
               >
                 {isShowAll && (
@@ -179,6 +181,8 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-end",
                   paddingRight: "10px",
+                  overscrollBehavior: "none",
+                  overflow: "hidden",
                 }}
               >
                 <StyledButton
@@ -221,6 +225,8 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-start",
                   paddingLeft: "10px",
+                  overscrollBehavior: "none",
+                  overflow: "hidden",
                 }}
               >
                 {isShowAll && (
@@ -237,6 +243,8 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-end",
                   paddingRight: "10px",
+                  overscrollBehavior: "none",
+                  overflow: "hidden",
                 }}
               >
                 <StyledButton
