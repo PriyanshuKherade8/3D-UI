@@ -100,6 +100,8 @@ const MobileMain = () => {
         flex: 1,
         height: "100vh",
         position: "relative",
+        overflow: "hidden",
+        overscrollBehavior: "none",
       }}
     >
       <IframeResizer
@@ -123,6 +125,7 @@ const MobileMain = () => {
           right: 0,
           zIndex: 20,
           background: "transparent",
+          overscrollBehavior: "none",
         }}
       >
         <BottomDrawer
