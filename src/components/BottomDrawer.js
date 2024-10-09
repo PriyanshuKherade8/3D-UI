@@ -12,13 +12,11 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 const DrawerContainer = styled.div`
   position: relative;
   height: 20vh;
-  overflow: hidden;
-  overscroll-behavior: none;
 `;
 
 const Drawer = styled.div`
   position: fixed;
-  bottom: -200px;
+  bottom: -210px;
   left: 0;
   right: 0;
   background: white;
@@ -51,8 +49,6 @@ const SwipeableArea = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 10;
-  overscroll-behavior: none;
-  // overflow: hidden;
 `;
 
 const ButtonContainer = styled.div`
@@ -61,9 +57,6 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: absolute;
   top: -42px;
-  border: 1px solid red;
-  overscroll-behavior: none;
-  overflow: hidden;
 `;
 
 const StyledButton = styled(Box)`
@@ -169,8 +162,6 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-start",
                   paddingLeft: "10px",
-                  overscrollBehavior: "none",
-                  overflow: "hidden",
                 }}
               >
                 {isShowAll && (
@@ -187,8 +178,6 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-end",
                   paddingRight: "10px",
-                  overscrollBehavior: "none",
-                  overflow: "hidden",
                 }}
               >
                 <StyledButton
@@ -231,8 +220,6 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-start",
                   paddingLeft: "10px",
-                  overscrollBehavior: "none",
-                  overflow: "hidden",
                 }}
               >
                 {isShowAll && (
@@ -249,8 +236,6 @@ const BottomDrawer = ({
                   display: "flex",
                   justifyContent: "flex-end",
                   paddingRight: "10px",
-                  overscrollBehavior: "none",
-                  overflow: "hidden",
                 }}
               >
                 <StyledButton

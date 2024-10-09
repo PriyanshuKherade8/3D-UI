@@ -125,8 +125,6 @@ const MobileMain = () => {
           right: 0,
           zIndex: 20,
           background: "transparent",
-          overscrollBehavior: "none",
-          overflow: "hidden",
         }}
       >
         <BottomDrawer
