@@ -82,7 +82,14 @@ const ConfigureOptions = ({
       }}
     >
       <Box>
-        <Box> {selectedItem?.long_title}</Box>
+        <Box
+          style={{
+            fontWeight: "550",
+            fontSize: "18px",
+          }}
+        >
+          {selectedItem?.long_title}
+        </Box>
 
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
@@ -90,7 +97,11 @@ const ConfigureOptions = ({
             <Tab
               key={property.property_id}
               label={property.property_name}
-              style={{ fontWeight: "450" }}
+              style={{
+                fontWeight: "550",
+                textTransform: "capitalize",
+                fontSize: "15px",
+              }}
             />
           ))}
         </Tabs>
@@ -150,10 +161,9 @@ const ConfigureOptions = ({
                       <Typography
                         variant="caption"
                         sx={{
-                          // marginTop: "8px",
                           fontSize: "14px",
                           fontWeight: "450",
-                          fontFamily: "Urbanist",
+                          fontFamily: "Urbanist !important",
                         }}
                       >
                         {variant.variant_name}
