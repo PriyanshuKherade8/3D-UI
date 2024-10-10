@@ -112,7 +112,7 @@ const BottomDrawer = ({
   currVariant,
   setIframeHeight, // New prop to control the iframe height
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
   const { mutate: changeProductCall } = useSetProductChangeCall();
