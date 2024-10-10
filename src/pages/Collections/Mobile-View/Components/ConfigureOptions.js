@@ -1,4 +1,4 @@
-import { Box, styled, Tab, Tabs, Typography } from "@mui/material";
+import { Box, styled, Tab, Tabs, Typography, Tooltip } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSetActionCall } from "../../services";
 
@@ -67,7 +67,7 @@ const ConfigureOptions = ({
     };
     variantChange(payload);
   };
-  console.log("selectedItem", selectedItem);
+
   return (
     <Box
       sx={{
@@ -158,16 +158,23 @@ const ConfigureOptions = ({
                         )}
                       </Box>
 
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontSize: "14px",
-                          fontWeight: "450",
-                          fontFamily: "Urbanist !important",
-                        }}
-                      >
-                        {variant.variant_name}
-                      </Typography>
+                      <Tooltip title={variant.variant_name}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: "450",
+                            fontFamily: "Urbanist !important",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            width: "100px", // Adjust width as needed for truncation
+                          }}
+                          noWrap
+                        >
+                          {variant.variant_name}
+                        </Typography>
+                      </Tooltip>
                     </Box>
                   </VariantItem>
                 );

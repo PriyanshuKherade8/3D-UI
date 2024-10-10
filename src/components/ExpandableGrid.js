@@ -8,6 +8,7 @@ import {
   CardContent,
   CardActionArea,
   CardMedia,
+  Tooltip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -75,9 +76,21 @@ const ExpandableGrid = ({
                     }}
                   />
                   <CardContent>
-                    <Typography variant="body1" align="center">
-                      {item.title}
-                    </Typography>
+                    <Tooltip title={item.title}>
+                      <Typography
+                        variant="body1"
+                        align="center"
+                        noWrap
+                        style={{
+                          fontSize: "14px",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
+                    </Tooltip>
                   </CardContent>
                 </CardActionArea>
               </Card>
