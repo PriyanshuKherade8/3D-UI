@@ -33,7 +33,7 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
 
       changeViewCall(viewPayload);
     }
-  }, [defaultView, sessionId, collectionActionData, changeViewCall]);
+  }, [defaultView, sessionId, collectionActionData]);
 
   const handleViewChange = (view) => {
     setSelectedView(view.view_id);
