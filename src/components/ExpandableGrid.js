@@ -88,7 +88,7 @@ const ExpandableGrid = ({
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {item.title}
+                        {item.variant.display_name}
                       </Typography>
                     </Tooltip>
                   </CardContent>

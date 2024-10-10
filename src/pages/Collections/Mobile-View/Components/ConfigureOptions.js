@@ -169,10 +169,12 @@ const ConfigureOptions = ({
                             overflow: "hidden",
                             whiteSpace: "nowrap",
                             width: "100px", // Adjust width as needed for truncation
+                            display: "flex",
+                            justifyContent: "center",
                           }}
                           noWrap
                         >
-                          {variant.variant_name}
+                          {variant.display_name}
                         </Typography>
                       </Tooltip>
                     </Box>
