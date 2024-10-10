@@ -223,7 +223,7 @@ const ItemCard = ({ image, title, isSelected, onClick }) => (
 const Main = () => {
   const [rotate, setRotate] = useState(false);
 
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [showAllProducts, setShowAllProducts] = useState(false);
 
   const [showNewPaper, setShowNewPaper] = useState(false);
@@ -295,11 +295,13 @@ const Main = () => {
   }, [sessionId]);
 
   const selectedItem =
-    selectedIndex !== null
-      ? [initialCardItems[selectedIndex]]
-      : initialCardItems?.find((item) => item.item_id === currItemId)
-      ? [initialCardItems?.find((item) => item.item_id === currItemId)]
-      : [];
+    initialCardItems && initialCardItems.length > 0 // Check if initialCardItems exists and is not empty
+      ? selectedIndex !== null && selectedIndex < initialCardItems.length
+        ? [initialCardItems[selectedIndex]] // Use item at selectedIndex if valid
+        : initialCardItems.find((item) => item.item_id === currItemId)
+        ? [initialCardItems.find((item) => item.item_id === currItemId)] // Use item found by currItemId
+        : [initialCardItems[0]] // Fallback to the first item if no selection
+      : []; // Return empty array if initialCardItems is undefined or empty
 
   console.log("selectedItem", selectedItem);
 
@@ -419,7 +421,7 @@ const Main = () => {
                       isSelected={selectedIndex === index}
                       onClick={() => {
                         setSelectedIndex(index);
-                        setShowAllProducts((prev) => !prev);
+                        // setShowAllProducts((prev) => !prev);
                       }}
                     />
                   ))}
