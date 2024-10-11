@@ -5,6 +5,7 @@ import SwipeableEdgeDrawer from "./pages/Collections/Mobile-View/Components/Swip
 import BottomDrawer from "./components/BottomDrawer";
 import MobileMain from "./pages/Collections/Mobile-View/MobileMain";
 import RenderView from "./pages/Collections/RenderView";
+import StoryMain from "./pages/Story/Mobile-View/StoryMain";
 function App() {
   return (
     <Router>
@@ -13,7 +14,7 @@ function App() {
         <Route path="/about" element={<BottomDrawer />} />
         <Route path="/view/:id" element={<RenderView />} />
         <Route path="/desktop/:id" element={<RenderView />} />
-        <Route path="/mobile/:id" element={<MobileMain />} />
+        <Route path="/story" element={<StoryMain />} />
         <Route path="*" element={<>{"Not Found"}</>} />
       </Routes>
     </Router>

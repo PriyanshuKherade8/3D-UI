@@ -11,6 +11,7 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
       backgroundColor: "#F4F4F4",
       zIndex: 1,
       transition: "bottom 0.3s ease",
+      border: "1px solid red",
     }}
   >
     <Box sx={{ marginBottom: "16px" }}>
