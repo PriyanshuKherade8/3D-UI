@@ -32,6 +32,7 @@ const MobileMain = () => {
       product_id: product?.product?.product_id,
       product: product?.product,
       item_id: product?.item_id,
+      views: product?.views,
     };
   });
 
@@ -85,7 +86,7 @@ const MobileMain = () => {
         : [initialCardItems[0]] // Fallback to the first item if no selection
       : []; // Return empty array if initialCardItems is undefined or empty
 
-  const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
+  const viewActionData = selectedItem;
   const collectionActionData = data?.data?.experience?.collection;
 
   useEffect(() => {

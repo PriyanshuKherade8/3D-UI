@@ -5,7 +5,10 @@ import { useSetProductChangeCall } from "../../services";
 const Views = ({ viewActionData, sessionId, collectionActionData }) => {
   const { mutate: changeViewCall } = useSetProductChangeCall();
 
-  const defaultView = viewActionData?.find((view) => view.is_default) || null;
+  const currentViewActionData = viewActionData?.[0]?.views?.[0]?.is_default;
+  const renderViewActions = viewActionData?.[0]?.views;
+
+  const defaultView = currentViewActionData ? currentViewActionData : null;
 
   const [selectedView, setSelectedView] = useState(
     defaultView ? defaultView.view_id : null
@@ -80,7 +83,7 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
           padding: "1px 2px",
         }}
       >
-        {viewActionData?.map((view) => {
+        {renderViewActions?.map((view) => {
           const largeIcon = view.view_icons.find(
             (icon) => icon.file_type === "L"
           );
