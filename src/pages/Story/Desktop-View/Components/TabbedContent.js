@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
-import Configure from "./Configure";
+// import Configure from "../../Mobile-View/Components/Configure";
+import HorizontalScrollComponent from "../../Mobile-View/Components/Chapters";
 import Chapters from "./Chapters";
+import Configure from "./Configure";
 
 // Styled component for the tab container
 const TabContainer = styled.div`

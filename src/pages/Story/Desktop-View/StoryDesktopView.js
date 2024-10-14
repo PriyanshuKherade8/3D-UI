@@ -11,6 +11,8 @@ import {
 import IframeResizer from "@iframe-resizer/react";
 import RedoIcon from "@mui/icons-material/Redo";
 import UndoIcon from "@mui/icons-material/Undo";
+import MediaControlBar from "../Mobile-View/Components/MediaControlBar";
+import TabbedContent from "./Components/TabbedContent";
 
 const Toolbar = ({
   rotate,
@@ -59,6 +61,23 @@ const Toolbar = ({
   );
 };
 
+const MediaControlBarComp = () => {
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        position: "absolute",
+        bottom: "20px",
+        display: "flex",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <MediaControlBar />
+    </Box>
+  );
+};
+
 const StoryDesktopView = () => {
   const [rotate, setRotate] = useState(false);
   const [panelOpen, setPanelOpen] = useState(true); // Panel is open by default
@@ -96,15 +115,19 @@ const StoryDesktopView = () => {
       {/* Left side or main container */}
       <Box
         sx={{
-          width: panelOpen ? (isTablet ? "75%" : "84%") : "97%", // Adjust width based on panel state
+          width: panelOpen ? (isTablet ? "75%" : "75%") : "97%",
           height: "100vh",
           transition: "width 0.2s ease",
           display: "flex",
           flexDirection: "column",
-          border: "1px solid red",
+
+          position: "relative",
         }}
       >
         <IframeResizer src={url} height="100%" width="100%" />
+
+        {/* MediaControlBar at the bottom and centered */}
+        <MediaControlBarComp />
       </Box>
 
       {/* Right side */}
@@ -117,7 +140,6 @@ const StoryDesktopView = () => {
             right: "0",
             height: "100%",
             zIndex: 1000,
-            border: "1px solid blue",
           }}
         >
           <Paper elevation={3} sx={{ height: "100%" }}>
@@ -148,13 +170,12 @@ const StoryDesktopView = () => {
       {panelOpen && (
         <Box
           sx={{
-            width: isTablet ? "25%" : "16%", // Panel size when open
+            width: isTablet ? "25%" : "25%", // Panel size when open
             height: "100vh",
             transition: "width 0.2s ease",
             position: "relative",
             display: "flex",
             flexDirection: "column",
-            border: "1px solid green",
           }}
         >
           <Box
@@ -175,6 +196,11 @@ const StoryDesktopView = () => {
             onClick={() => setPanelOpen(false)} // User can click to close the panel
           >
             <ArrowForwardIosOutlinedIcon sx={{ fontSize: "20px" }} />
+          </Box>
+          <Box style={{ padding: "15px" }}>{"Title"}</Box>
+
+          <Box style={{ padding: "15px" }}>
+            <TabbedContent />
           </Box>
         </Box>
       )}
