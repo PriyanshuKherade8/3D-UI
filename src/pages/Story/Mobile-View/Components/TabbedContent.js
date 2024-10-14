@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Configure from "./Configure";
+import Chapters from "./Chapters";
 
 // Styled component for the tab container
 const TabContainer = styled.div`
@@ -51,12 +52,12 @@ const Description = () => (
 //   </ContentContainer>
 // );
 
-const Chapters = () => (
-  <ContentContainer>
-    <h2>Chapters</h2>
-    <p>Here are the different chapters and sections available.</p>
-  </ContentContainer>
-);
+// const Chapters = () => (
+//   <ContentContainer>
+//     <h2>Chapters</h2>
+//     <p>Here are the different chapters and sections available.</p>
+//   </ContentContainer>
+// );
 
 const TabbedContent = () => {
   const [selectedTab, setSelectedTab] = useState("description");
