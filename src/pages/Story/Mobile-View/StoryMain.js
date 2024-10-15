@@ -11,6 +11,7 @@ import {
 import StoryBottomDrawer from "../StoryBottomDrawer";
 import AnimatedMenu from "../../Collections/Mobile-View/Components/AnimatedMenu";
 import useSocket from "../../../hooks/useSocketMessages";
+import { useGetExperienceDataByIdForStory } from "../services";
 
 const StoryMain = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -20,7 +21,9 @@ const StoryMain = () => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [iframeHeight, setIframeHeight] = useState("100vh"); // New state for iframe height
   const { id } = useParams();
-  const { data } = useGetExperienceDataById(id);
+  const { data } = useGetExperienceDataByIdForStory(id);
+  const chapterListFromApi = data?.data?.experience?.chapter_list;
+
   const productList = data?.data?.experience?.collection?.items;
   console.log("productList", productList);
 
@@ -79,8 +82,9 @@ const StoryMain = () => {
     currActId,
     currItemId,
     currVariant,
+    currMessage,
   } = useSocket(socket);
-  console.log("currVariant", currVariant);
+
   const selectedItem =
     initialCardItems && initialCardItems.length > 0 // Check if initialCardItems exists and is not empty
       ? selectedIndex !== null && selectedIndex < initialCardItems.length
@@ -92,6 +96,27 @@ const StoryMain = () => {
 
   const viewActionData = selectedItem;
   const collectionActionData = data?.data?.experience?.collection;
+
+  const [matchedChapter, setMatchedChapter] = useState(null);
+  console.log("matchedChapter", matchedChapter);
+  useEffect(() => {
+    // Function to match chapter_id
+    const matchChapter = () => {
+      // Get the current chapter_id from the WebSocket chapterList
+      const currentChapterId = chapterList?.[0]?.chapter_id; // Assuming you want the first chapter
+      // Find the corresponding chapter from the API data
+      const matched = chapterListFromApi.find(
+        (chapter) => chapter.chapter_id === currentChapterId
+      );
+      // Update the state with the matched chapter
+      setMatchedChapter(matched);
+    };
+
+    // Match chapter when chapterList changes
+    if (chapterList?.length > 0) {
+      matchChapter();
+    }
+  }, [chapterList, chapterListFromApi]);
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
@@ -152,6 +177,9 @@ const StoryMain = () => {
           viewActionData={viewActionData}
           currVariant={currVariant}
           setIframeHeight={setIframeHeight}
+          matchedChapter={matchedChapter}
+          sendRotateCall={sendRotateCall}
+          getData={getData}
         />
       </Box>
 

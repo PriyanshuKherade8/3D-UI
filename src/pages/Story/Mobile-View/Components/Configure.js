@@ -125,7 +125,11 @@ const VariantItem = styled(Box)(({ isSelected }) => ({
 }));
 
 // Component
-const Configure = ({ sessionId = "mockSession", currVariant = {} }) => {
+const Configure = ({ currVariant = {}, getData }) => {
+  console.log("getDatainside", getData?.experience?.products);
+  const productData = getData?.experience?.products;
+  const sessionId = getData?.sessionID;
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const selectedItem = mockSelectedItem;

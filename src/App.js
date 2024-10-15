@@ -16,7 +16,7 @@ function App() {
         <Route path="/about" element={<BottomDrawer />} />
         <Route path="/view/:id" element={<RenderView />} />
         <Route path="/desktop/:id" element={<RenderView />} />
-        <Route path="/story" element={<RenderStory />} />
+        <Route path="/story/:id" element={<RenderStory />} />
         <Route path="/chapter" element={<Chapters />} />
         <Route path="*" element={<>{"Not Found"}</>} />
       </Routes>

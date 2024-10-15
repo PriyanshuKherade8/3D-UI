@@ -7,6 +7,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
+// Styled components
 const ControlBar = styled(Box)`
   display: flex;
   justify-content: space-between;
@@ -16,6 +17,7 @@ const ControlBar = styled(Box)`
   border-radius: 12px;
   //   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   width: auto;
+  z-index: 1000; // Ensure it appears above the iframe
 `;
 
 const IconButtonStyled = styled(IconButton)`
@@ -29,22 +31,61 @@ const IconButtonStyled = styled(IconButton)`
   }
 `;
 
-const MediaControlBar = () => {
+const MediaControlBar = ({ sessionId, sendRotateCall }) => {
+  console.log("zzz", sessionId);
   const [clickedIcon, setClickedIcon] = useState(null);
+
+  const [replay, setReplay] = useState(false);
+  const [playPause, setPlayPause] = useState(true);
+
+  const handleReplay = () => {
+    setReplay((prev) => {
+      const newReplayValue = !prev;
+      const payload = {
+        session_id: sessionId,
+        message: {
+          type: "replay",
+          message: newReplayValue,
+        },
+      };
+
+      sendRotateCall(payload);
+      return newReplayValue;
+    });
+  };
+
+  const handlePlayPause = () => {
+    setPlayPause((prev) => {
+      const newPlayPauseValue = !prev;
+      const payload = {
+        session_id: sessionId,
+        message: {
+          type: "play_pause",
+          message: newPlayPauseValue,
+        },
+      };
+
+      sendRotateCall(payload);
+      return newPlayPauseValue;
+    });
+  };
 
   const handleClick = (icon) => {
     setClickedIcon(icon);
-    // Optional: You can add further logic here based on the clicked icon
+
     setTimeout(() => {
-      setClickedIcon(null); // Reset the click effect after animation
-    }, 300); // Duration of the effect
+      setClickedIcon(null);
+    }, 300);
   };
 
   return (
     <ControlBar>
       <IconButtonStyled
         clicked={clickedIcon === "repeat"}
-        onClick={() => handleClick("repeat")}
+        onClick={() => {
+          handleClick("repeat");
+          handleReplay();
+        }}
       >
         <RepeatIcon />
       </IconButtonStyled>
@@ -57,7 +98,10 @@ const MediaControlBar = () => {
         </IconButtonStyled>
         <IconButtonStyled
           clicked={clickedIcon === "play"}
-          onClick={() => handleClick("play")}
+          onClick={() => {
+            handleClick("play");
+            handlePlayPause();
+          }}
         >
           <PlayArrowIcon />
         </IconButtonStyled>

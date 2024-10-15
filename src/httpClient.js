@@ -22,3 +22,10 @@ export const backendClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const httpClientForIframeForStory = axios.create({
+  baseURL: "http://143.110.186.134/api/story",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});

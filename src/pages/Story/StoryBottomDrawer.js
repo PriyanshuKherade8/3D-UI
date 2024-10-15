@@ -121,7 +121,11 @@ const StoryBottomDrawer = ({
   collectionActionData,
   currVariant,
   setIframeHeight, // New prop to control the iframe height
+  matchedChapter,
+  sendRotateCall,
+  getData,
 }) => {
+  console.log("insideii", sessionId);
   const [isOpen, setIsOpen] = useState(true);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
@@ -183,7 +187,10 @@ const StoryBottomDrawer = ({
               onTouchMove={(e) => e.stopPropagation()}
             >
               <Box>
-                <MediaControlBar />
+                <MediaControlBar
+                  sessionId={sessionId}
+                  sendRotateCall={sendRotateCall}
+                />
               </Box>
             </ButtonContainer>
 
@@ -202,7 +209,10 @@ const StoryBottomDrawer = ({
               onTouchMove={(e) => e.stopPropagation()}
             >
               <Box>
-                <MediaControlBar />
+                <MediaControlBar
+                  sessionId={sessionId}
+                  sendRotateCall={sendRotateCall}
+                />
               </Box>
             </ButtonContainer>
           )}
@@ -213,7 +223,10 @@ const StoryBottomDrawer = ({
               </Box>
 
               <Box>
-                <TabbedContent />
+                <TabbedContent
+                  matchedChapter={matchedChapter}
+                  getData={getData}
+                />
               </Box>
             </Box>
           </DrawerContent>
