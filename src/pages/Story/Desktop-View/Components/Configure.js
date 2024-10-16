@@ -1,140 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import ExpandableGrid from "../../../../components/ExpandableGrid";
+import { useSetActionCall } from "../../../Collections/services";
 
-// Sample hardcoded data
-const sampleData = [
-  {
-    product: {
-      property: [
-        {
-          property_id: "1",
-          property_name: "Color",
-          variants: [
-            {
-              variant_id: "VAR001",
-              variant_name: "Red",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/FF0000",
-                },
-              ],
-              display_name: "Red Color",
-            },
-            {
-              variant_id: "VAR002",
-              variant_name: "Blue",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/0000FF",
-                },
-              ],
-              display_name: "Blue Color",
-            },
-            {
-              variant_id: "VAR003",
-              variant_name: "Blue",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/0000FF",
-                },
-              ],
-              display_name: "Blue Color",
-            },
-            {
-              variant_id: "VAR004",
-              variant_name: "Blue",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/0000FF",
-                },
-              ],
-              display_name: "Blue Color",
-            },
-          ],
-        },
-        {
-          property_id: "2",
-          property_name: "Size",
-          variants: [
-            {
-              variant_id: "VAR003",
-              variant_name: "Small",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/CCCCCC",
-                },
-              ],
-              display_name: "Small Size",
-            },
-            {
-              variant_id: "VAR004",
-              variant_name: "Large",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/666666",
-                },
-              ],
-              display_name: "Large Size",
-            },
-            {
-              variant_id: "VAR005",
-              variant_name: "Large",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/666666",
-                },
-              ],
-              display_name: "Large Size",
-            },
-            {
-              variant_id: "VAR006",
-              variant_name: "Large",
-              variant_icons: [
-                {
-                  file_type: "L",
-                  path: "https://via.placeholder.com/90/666666",
-                },
-              ],
-              display_name: "Large Size",
-            },
-          ],
-        },
-      ],
-      product_key: "P001",
-    },
-  },
-];
+const Configure = ({ getData, currVariant }) => {
+  const productData = getData?.experience?.products || [];
+  const sessionId = getData?.sessionID;
 
-const Configure = ({ sessionId }) => {
-  // Use hardcoded data instead of props
-  const selectedItem = sampleData;
-  const propertySection = selectedItem?.[0]?.product?.property || [];
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
 
-  // Dummy function to simulate variant change action
+  // Collect all properties from all products
+  const allProperties = productData.reduce((acc, product) => {
+    if (product?.property) {
+      return [...acc, ...product.property];
+    }
+    return acc;
+  }, []);
+
+  useEffect(() => {
+    if (currVariant?.variant_id) {
+      setSelectedVariantId(currVariant.variant_id);
+    } else if (allProperties.length > 0 && !selectedVariantId) {
+      const firstVariant = allProperties[0]?.variants[0]?.variant_id;
+      setSelectedVariantId(firstVariant);
+    }
+  }, [currVariant, allProperties, selectedVariantId]);
+
+  const { mutate: variantChange } = useSetActionCall();
+  const productKey = productData?.[0]?.product_key;
+
   const handleVariantChange = (propertyId, variant) => {
+    setSelectedVariantId(variant.variant_id);
+
     const payload = {
       session_id: sessionId,
       message: {
         type: "change_variant",
         message: {
-          product_key: selectedItem[0].product.product_key,
+          product_key: productKey,
           property_id: propertyId,
-          variant_id: variant.variant_id,
+          variant_id: variant?.variant_id,
         },
       },
     };
-
-    // Simulate variant change
-    console.log("Variant changed:", payload);
+    variantChange(payload);
   };
+
+  const propertySection = productData?.[0]?.property || [];
 
   return (
     <Box>
@@ -143,14 +55,20 @@ const Configure = ({ sessionId }) => {
           image:
             variant.variant_icons.find((icon) => icon.file_type === "L")
               ?.path || "",
-          title: variant.variant_name,
+          title: variant.display_name,
           variant,
         }));
+
+        // Select the item to be highlighted based on selectedVariantId or default to first item
+        const selectedItem =
+          itemsData.find(
+            (item) => item.variant.variant_id === selectedVariantId
+          ) || itemsData[0];
 
         return (
           <ExpandableGrid
             key={property.property_id}
-            title={property.property_name}
+            title={property.display_name}
             items={itemsData}
             itemPerRow={3}
             totalRows={1}
@@ -158,6 +76,7 @@ const Configure = ({ sessionId }) => {
             onItemSelect={(selectedVariant) =>
               handleVariantChange(property.property_id, selectedVariant)
             }
+            selectedItem={selectedItem} // Pass the selected item to the ExpandableGrid
           />
         );
       })}

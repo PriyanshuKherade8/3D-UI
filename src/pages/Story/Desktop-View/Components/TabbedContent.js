@@ -37,21 +37,24 @@ const ContentContainer = styled.div`
 `;
 
 // Content for different tabs
-const Description = () => (
+const Description = ({ matchedChapter }) => (
   <ContentContainer>
-    <h2>Handle</h2>
-    <p>
-      Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum
-      Lorem
-    </p>
+    <h2>{matchedChapter?.display_title}</h2>
+    <p>{matchedChapter?.display_text}</p>
   </ContentContainer>
 );
 
-const TabbedContent = () => {
+const TabbedContent = ({
+  matchedChapter,
+  getData,
+  currVariant,
+  chapterList,
+}) => {
+  console.log("matchedChapterD", matchedChapter);
   const [selectedTab, setSelectedTab] = useState("description");
 
   return (
-    <Box style={{}}>
+    <Box>
       {/* Tabs */}
 
       <TabContainer>
@@ -76,9 +79,15 @@ const TabbedContent = () => {
       </TabContainer>
 
       {/* Content Based on Selected Tab */}
-      {selectedTab === "description" && <Description />}
-      {selectedTab === "configure" && <Configure />}
-      {selectedTab === "chapters" && <Chapters />}
+      {selectedTab === "description" && (
+        <Description matchedChapter={matchedChapter} />
+      )}
+      {selectedTab === "configure" && (
+        <Configure getData={getData} currVariant={currVariant} />
+      )}
+      {selectedTab === "chapters" && (
+        <Chapters chapterList={chapterList} getData={getData} />
+      )}
     </Box>
   );
 };

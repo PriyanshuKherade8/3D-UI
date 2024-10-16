@@ -180,6 +180,7 @@ const StoryMain = () => {
           matchedChapter={matchedChapter}
           sendRotateCall={sendRotateCall}
           getData={getData}
+          chapterList={chapterList}
         />
       </Box>
 

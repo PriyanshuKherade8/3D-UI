@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Slider, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useSetActionCall } from "../../../Collections/services";
 
 // Styled component to hide scrollbar
 const ScrollableContainer = styled(Box)(({ theme }) => ({
@@ -31,6 +32,7 @@ const Item = styled(Box)(({ theme, isActive }) => ({
 }));
 
 const HorizontalScrollComponent = ({ getData }) => {
+  const sessionId = getData?.sessionID;
   const chapterList = getData?.experience?.chapter_list || [];
   console.log("chapterList", chapterList);
 
@@ -44,6 +46,18 @@ const HorizontalScrollComponent = ({ getData }) => {
     setActiveIndex(index === activeIndex ? null : index); // Toggle active index
   };
 
+  const { mutate: sendRotateCall } = useSetActionCall();
+
+  const handleChapter = (chapterId) => {
+    const payload = {
+      session_id: sessionId,
+
+      type: "chapter_chapter",
+      message: { chapter_id: chapterId },
+    };
+    sendRotateCall(payload);
+  };
+
   return (
     <Box sx={{ paddingTop: "4px", height: "100%" }}>
       <ScrollableContainer style={{ height: "140px" }}>
@@ -51,7 +65,10 @@ const HorizontalScrollComponent = ({ getData }) => {
           <Item
             key={chapter.chapter_id}
             isActive={activeIndex === index}
-            onClick={() => handleClick(index)}
+            onClick={() => {
+              handleClick(index);
+              handleChapter(chapter.chapter_id); // Send chapter_id on click
+            }}
           >
             <Typography
               variant="caption"

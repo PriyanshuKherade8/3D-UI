@@ -20,6 +20,7 @@ const ExpandableGrid = ({
   totalRows = 1,
   displayImage = "square",
   onItemSelect,
+  selectedItem, // Add selectedItem prop
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -45,7 +46,6 @@ const ExpandableGrid = ({
         }}
       >
         <Grid container spacing={2} justifyContent="flex-start">
-          {/* Align items to start */}
           {displayedItems.map((item, index) => (
             <Grid
               item
@@ -53,28 +53,35 @@ const ExpandableGrid = ({
               key={index}
               sx={{ display: "flex", justifyContent: "center" }}
             >
-              <Card
-                variant="outlined"
-                sx={{
-                  height: 146,
-                  width: 146,
-                  marginBottom: "1px",
-                }}
-              >
+              <Box variant="outlined" sx={{ height: 146, width: 146 }}>
                 <CardActionArea onClick={() => onItemSelect(item.variant)}>
-                  <CardMedia
-                    component="img"
-                    height="90"
-                    image={item.image}
-                    alt={item.title}
+                  <Box
                     sx={{
-                      objectFit: "cover",
-                      borderRadius: displayImage === "circle" ? "50%" : "0%",
-                      width: displayImage === "circle" ? "90px" : "100%",
-                      height: displayImage === "circle" ? "90px" : "90px",
+                      width: "68px",
+                      height: "68px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border:
+                        selectedItem.variant.variant_id ===
+                        item.variant.variant_id
+                          ? "2px solid blue" // Adjust border color for selected item
+                          : "1px solid transparent",
+                      borderRadius: "50%",
                       margin: "auto",
+                      overflow: "hidden", // Ensure image stays within the border
                     }}
-                  />
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={{
+                        height: "62px",
+                        width: "62px",
+                        borderRadius: "50%", // Make the image circular
+                      }}
+                    />
+                  </Box>
                   <CardContent>
                     <Tooltip title={item.title}>
                       <Typography
@@ -93,7 +100,7 @@ const ExpandableGrid = ({
                     </Tooltip>
                   </CardContent>
                 </CardActionArea>
-              </Card>
+              </Box>
             </Grid>
           ))}
         </Grid>

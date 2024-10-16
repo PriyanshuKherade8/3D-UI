@@ -124,6 +124,7 @@ const StoryBottomDrawer = ({
   matchedChapter,
   sendRotateCall,
   getData,
+  chapterList,
 }) => {
   console.log("insideii", sessionId);
   const [isOpen, setIsOpen] = useState(true);
@@ -212,6 +213,7 @@ const StoryBottomDrawer = ({
                 <MediaControlBar
                   sessionId={sessionId}
                   sendRotateCall={sendRotateCall}
+                  chapterList={chapterList}
                 />
               </Box>
             </ButtonContainer>

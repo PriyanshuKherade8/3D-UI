@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Slider } from "@mui/material";
+import { Box, Slider, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useSetActionCall } from "../../../Collections/services";
 
 // Styled component to hide scrollbar
 const ScrollableContainer = styled(Box)(({ theme }) => ({
@@ -31,43 +32,61 @@ const Item = styled(Box)(({ theme, isActive }) => ({
   },
 }));
 
-const Chapters = () => {
-  const [activeIndex, setActiveIndex] = useState(null); // State to track the active item
+const Chapters = ({ getData }) => {
+  console.log("insidechap", getData);
+  const sessionId = getData?.sessionID;
+  const chapterList = getData?.experience?.chapter_list || [];
+  console.log("popop", chapterList);
 
-  const items = [
-    {
-      title: "Adjustable handle",
-      img: "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8",
-    },
-    {
-      title: "Adjustable handle",
-      img: "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8",
-    },
-    {
-      title: "Adjustable handle",
-      img: "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8",
-    },
-  ];
+  const placeholderImg =
+    "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8";
+
+  const [activeIndex, setActiveIndex] = useState(null); // State to track the active item
 
   const handleClick = (index) => {
     setActiveIndex(index === activeIndex ? null : index); // Toggle active index
   };
 
+  const { mutate: sendRotateCall } = useSetActionCall();
+
+  const handleChapter = (chapterId) => {
+    const payload = {
+      session_id: sessionId,
+
+      type: "chapter_chapter",
+      message: { chapter_id: chapterId },
+    };
+    sendRotateCall(payload);
+  };
+
   return (
     <Box sx={{ paddingTop: "4px", height: "100%" }}>
       <ScrollableContainer>
-        {items.map((item, index) => (
+        {chapterList.map((chapter, index) => (
           <Item
-            key={index}
+            key={chapter.chapter_id}
             isActive={activeIndex === index}
-            onClick={() => handleClick(index)}
+            onClick={() => {
+              handleClick(index);
+              handleChapter(chapter.chapter_id); // Send chapter_id on click
+            }}
           >
+            <Typography
+              variant="caption"
+              sx={{
+                marginTop: "5px",
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+            >
+              {chapter.display_title}
+            </Typography>
             <Box
               display="flex"
               justifyContent="center"
               style={{ height: "75px", width: "100%" }}
             >
-              <img src={item.img} alt={item.title} />
+              <img src={placeholderImg} alt={chapter.display_title} />
             </Box>
             <Slider
               defaultValue={0}
