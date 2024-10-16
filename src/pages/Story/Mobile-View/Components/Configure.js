@@ -1,104 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, styled, Tab, Tabs, Typography, Tooltip } from "@mui/material";
-
-// Mock Data
-const mockSelectedItem = {
-  long_title: "Sample Product",
-  product: {
-    property: [
-      {
-        property_id: "01",
-        property_name: "Color",
-        variants: [
-          {
-            variant_id: "VAR1001",
-            variant_name: "Red",
-            display_name: "Red",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/FF0000", // Mock image
-              },
-            ],
-          },
-          {
-            variant_id: "VAR1002",
-            variant_name: "Blue",
-            display_name: "Blue",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/0000FF", // Mock image
-              },
-            ],
-          },
-          {
-            variant_id: "VAR1003",
-            variant_name: "Blue",
-            display_name: "Blue",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/0000FF", // Mock image
-              },
-            ],
-          },
-          {
-            variant_id: "VAR1004",
-            variant_name: "Blue",
-            display_name: "Blue",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/0000FF", // Mock image
-              },
-            ],
-          },
-          {
-            variant_id: "VAR1005",
-            variant_name: "Blue",
-            display_name: "Blue",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/0000FF", // Mock image
-              },
-            ],
-          },
-        ],
-      },
-      {
-        property_id: "02",
-        property_name: "Size",
-        variants: [
-          {
-            variant_id: "VAR2001",
-            variant_name: "Small",
-            display_name: "Small",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/FFFFFF", // Mock image
-              },
-            ],
-          },
-          {
-            variant_id: "VAR2002",
-            variant_name: "Large",
-            display_name: "Large",
-            variant_icons: [
-              {
-                file_type: "M",
-                path: "https://via.placeholder.com/62/CCCCCC", // Mock image
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    product_key: "P10001",
-  },
-};
+import { useSetActionCall } from "../../../Collections/services";
 
 // Styles
 const ScrollableContainer = styled(Box)(({ theme }) => ({
@@ -124,43 +26,51 @@ const VariantItem = styled(Box)(({ isSelected }) => ({
   transition: "border 0.3s ease",
 }));
 
-// Component
-const Configure = ({ currVariant = {}, getData }) => {
-  console.log("getDatainside", getData?.experience?.products);
-  const productData = getData?.experience?.products;
+const Configure = ({ getData, currVariant }) => {
+  const productData = getData?.experience?.products || [];
   const sessionId = getData?.sessionID;
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
-  const selectedItem = mockSelectedItem;
-  const properties = selectedItem?.product?.property || [];
+
+  // Collect all properties from all products
+  const allProperties = productData.reduce((acc, product) => {
+    if (product?.property) {
+      return [...acc, ...product.property];
+    }
+    return acc;
+  }, []);
 
   useEffect(() => {
     if (currVariant?.variant_id) {
       setSelectedVariantId(currVariant.variant_id);
-    } else if (properties.length > 0 && !selectedVariantId) {
-      const firstVariant = properties[0]?.variants[0]?.variant_id;
+    } else if (allProperties.length > 0 && !selectedVariantId) {
+      const firstVariant = allProperties[0]?.variants[0]?.variant_id;
       setSelectedVariantId(firstVariant);
     }
-  }, [currVariant, properties, selectedVariantId]);
+  }, [currVariant, allProperties, selectedVariantId]);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+  const { mutate: variantChange } = useSetActionCall();
+  const productKey = getData?.experience?.products?.[0]?.product_key;
 
   const handleVariantChange = (propertyId, variant) => {
     setSelectedVariantId(variant.variant_id);
-    console.log("Selected Variant Change Payload:", {
+
+    const payload = {
       session_id: sessionId,
       message: {
         type: "change_variant",
         message: {
-          product_key: selectedItem?.product?.product_key,
+          product_key: productKey, // Assuming each variant has a product_key
           property_id: propertyId,
           variant_id: variant?.variant_id,
         },
       },
-    });
+    };
+    variantChange(payload);
   };
 
   return (
@@ -179,10 +89,10 @@ const Configure = ({ currVariant = {}, getData }) => {
       <Box>
         {/* Tabs for properties */}
         <Tabs value={selectedTab} onChange={handleChange}>
-          {properties.map((property, index) => (
+          {allProperties.map((property, index) => (
             <Tab
-              key={property.property_id}
-              label={property.property_name}
+              key={property?.property_id}
+              label={property?.property_name} // Use property_name for the tab
               sx={{
                 fontWeight: 550,
                 textTransform: "capitalize",
@@ -193,9 +103,9 @@ const Configure = ({ currVariant = {}, getData }) => {
         </Tabs>
 
         {/* Variants for selected tab */}
-        {properties[selectedTab] && (
+        {allProperties[selectedTab] && (
           <ScrollableContainer>
-            {properties[selectedTab].variants.map((variant) => {
+            {allProperties[selectedTab].variants.map((variant) => {
               const variantIcon = variant.variant_icons.find(
                 (icon) => icon.file_type === "M"
               );
@@ -204,7 +114,7 @@ const Configure = ({ currVariant = {}, getData }) => {
                   key={variant?.variant_id}
                   onClick={() => {
                     handleVariantChange(
-                      properties[selectedTab].property_id,
+                      allProperties[selectedTab].property_id,
                       variant
                     );
                   }}
@@ -244,22 +154,8 @@ const Configure = ({ currVariant = {}, getData }) => {
                     </Box>
 
                     <Tooltip title={variant.variant_name}>
-                      <Typography
-                        variant="caption"
-                        // sx={{
-                        //   fontSize: "14px",
-                        //   fontWeight: 450,
-                        //   fontFamily: "Urbanist !important",
-                        //   textOverflow: "ellipsis",
-                        //   overflow: "hidden",
-                        //   whiteSpace: "nowrap",
-                        //   width: "100px",
-                        //   display: "flex",
-                        //   justifyContent: "center",
-                        // }}
-                        noWrap
-                      >
-                        {variant.display_name}
+                      <Typography variant="caption" noWrap>
+                        {variant?.display_name}
                       </Typography>
                     </Tooltip>
                   </Box>

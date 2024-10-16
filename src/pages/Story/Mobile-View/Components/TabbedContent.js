@@ -42,7 +42,7 @@ const Description = ({ matchedChapter }) => (
   </ContentContainer>
 );
 
-const TabbedContent = ({ matchedChapter, getData }) => {
+const TabbedContent = ({ matchedChapter, getData, currVariant }) => {
   const [selectedTab, setSelectedTab] = useState("description");
 
   return (
@@ -74,8 +74,10 @@ const TabbedContent = ({ matchedChapter, getData }) => {
       {selectedTab === "description" && (
         <Description matchedChapter={matchedChapter} />
       )}
-      {selectedTab === "configure" && <Configure getData={getData} />}
-      {selectedTab === "chapters" && <Chapters />}
+      {selectedTab === "configure" && (
+        <Configure getData={getData} currVariant={currVariant} />
+      )}
+      {selectedTab === "chapters" && <Chapters getData={getData} />}
     </Box>
   );
 };

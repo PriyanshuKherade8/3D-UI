@@ -226,6 +226,7 @@ const StoryBottomDrawer = ({
                 <TabbedContent
                   matchedChapter={matchedChapter}
                   getData={getData}
+                  currVariant={currVariant}
                 />
               </Box>
             </Box>
