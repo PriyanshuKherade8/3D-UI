@@ -34,11 +34,37 @@ const Item = styled(Box)(({ theme, isActive }) => ({
 const HorizontalScrollComponent = ({ getData }) => {
   const sessionId = getData?.sessionID;
   const chapterList = getData?.experience?.chapter_list || [];
-  console.log("chapterList", chapterList);
-
   const [activeIndex, setActiveIndex] = useState(null); // State to track the active item
 
-  // Placeholder image (can be replaced with chapter-specific images if available)
+  // Function to create a sequential order based on is_first_chapter and previous_chapter
+  const createChapterSequence = (chapters) => {
+    const sequence = [];
+    const chapterMap = new Map();
+
+    // Create a map of chapters by their chapter_id for quick lookup
+    chapters.forEach((chapter) => {
+      chapterMap.set(chapter.chapter_id, chapter);
+    });
+
+    // Find the first chapter using is_first_chapter: true
+    let currentChapter = chapters.find((chapter) => chapter.is_first_chapter);
+
+    // Traverse the chapters in sequence by following previous_chapter
+    while (currentChapter) {
+      sequence.push(currentChapter); // Add current chapter to sequence
+      const nextChapterId = chapters.find(
+        (chapter) => chapter.previous_chapter[0] === currentChapter.chapter_id
+      )?.chapter_id;
+      currentChapter = chapterMap.get(nextChapterId) || null;
+    }
+
+    return sequence;
+  };
+
+  const orderedChapters = createChapterSequence(chapterList);
+  console.log("orderedChapters", orderedChapters);
+
+  // Placeholder image
   const placeholderImg =
     "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8";
 
@@ -51,7 +77,6 @@ const HorizontalScrollComponent = ({ getData }) => {
   const handleChapter = (chapterId) => {
     const payload = {
       session_id: sessionId,
-
       type: "chapter_chapter",
       message: { chapter_id: chapterId },
     };
@@ -61,7 +86,7 @@ const HorizontalScrollComponent = ({ getData }) => {
   return (
     <Box sx={{ paddingTop: "4px", height: "100%" }}>
       <ScrollableContainer style={{ height: "140px" }}>
-        {chapterList.map((chapter, index) => (
+        {orderedChapters?.map((chapter, index) => (
           <Item
             key={chapter.chapter_id}
             isActive={activeIndex === index}

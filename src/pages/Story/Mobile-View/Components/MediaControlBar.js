@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import styled from "styled-components";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
@@ -140,7 +141,16 @@ const MediaControlBar = ({ sessionId, sendRotateCall, chapterList }) => {
             handlePlayPause();
           }}
         >
-          <PlayArrowIcon />
+          {/* Show Play if no next chapter, else toggle between Play/Pause */}
+          {nextChapter ? (
+            playPause ? (
+              <PauseIcon />
+            ) : (
+              <PlayArrowIcon />
+            )
+          ) : (
+            <PlayArrowIcon />
+          )}
         </IconButtonStyled>
 
         <IconButtonStyled
