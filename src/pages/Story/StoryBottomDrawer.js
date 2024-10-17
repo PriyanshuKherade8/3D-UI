@@ -59,7 +59,6 @@ const SwipeableArea = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 10;
-  border: 1px solid red;
 `;
 
 const ButtonContainer = styled.div`

@@ -88,8 +88,8 @@ const MediaControlBar = ({ sessionId, sendRotateCall, chapterList }) => {
       const payload = {
         session_id: sessionId,
         message: {
-          type: "chapter_chapter",
-          chapter_id: prevChapter.chapter_id,
+          type: "change_chapter",
+          message: { chapter_id: prevChapter.chapter_id },
         },
       };
       sendRotateCall(payload);
@@ -101,8 +101,8 @@ const MediaControlBar = ({ sessionId, sendRotateCall, chapterList }) => {
       const payload = {
         session_id: sessionId,
         message: {
-          type: "chapter_chapter",
-          chapter_id: nextChapter.chapter_id,
+          type: "change_chapter",
+          message: { chapter_id: nextChapter.chapter_id },
         },
       };
       sendRotateCall(payload);

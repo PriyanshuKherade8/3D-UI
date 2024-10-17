@@ -147,7 +147,6 @@ const StoryMain = () => {
           width: "100%",
           height: iframeHeight,
           transition: "height 0.3s ease",
-          border: "1px solid red",
         }}
       />
 

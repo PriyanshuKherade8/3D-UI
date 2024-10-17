@@ -63,8 +63,8 @@ const ExpandableGrid = ({
                       alignItems: "center",
                       justifyContent: "center",
                       border:
-                        selectedItem.variant.variant_id ===
-                        item.variant.variant_id
+                        selectedItem?.variant?.variant_id ===
+                        item?.variant?.variant_id
                           ? "2px solid blue" // Adjust border color for selected item
                           : "1px solid transparent",
                       borderRadius: "50%",
@@ -73,8 +73,8 @@ const ExpandableGrid = ({
                     }}
                   >
                     <img
-                      src={item.image}
-                      alt={item.title}
+                      src={item?.image}
+                      alt={item?.title}
                       style={{
                         height: "62px",
                         width: "62px",
@@ -95,7 +95,7 @@ const ExpandableGrid = ({
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {item.variant.display_name}
+                        {item?.variant?.display_name}
                       </Typography>
                     </Tooltip>
                   </CardContent>
