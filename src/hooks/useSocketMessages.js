@@ -7,6 +7,7 @@ const useSocket = (socket) => {
   const [currActId, setCurrActId] = useState();
   const [currItemId, setCurrItemId] = useState();
   const [currVariant, setCurrVariant] = useState();
+  const [playPause, setPlayPause] = useState();
 
   socket.on("message", (data) => {
     console.log("ddd", data);
@@ -29,6 +30,9 @@ const useSocket = (socket) => {
       case "change_variant":
         setCurrVariant(data.message.message);
         break;
+      case "canvas_play_pause":
+        setPlayPause(data.message.message);
+        break;
       //   case "is_loaded":
       //     setIsLoadingScreen(false);
       //     break;
@@ -46,6 +50,7 @@ const useSocket = (socket) => {
     currActId,
     currItemId,
     currVariant,
+    playPause,
   };
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, IconButton } from "@mui/material";
 import styled from "styled-components";
 import RepeatIcon from "@mui/icons-material/Repeat";
@@ -31,10 +31,22 @@ const IconButtonStyled = styled(IconButton)`
   }
 `;
 
-const MediaControlBar = ({ sessionId, sendRotateCall, chapterList }) => {
+const MediaControlBar = ({
+  sessionId,
+  sendRotateCall,
+  chapterList,
+  playPause: socketPlayPause,
+}) => {
   const [clickedIcon, setClickedIcon] = useState(null);
   const [replay, setReplay] = useState(false);
-  const [playPause, setPlayPause] = useState(true);
+  const [playPause, setPlayPause] = useState(true); // Local playPause state
+
+  // Sync initial state with socketPlayPause value
+  useEffect(() => {
+    if (typeof socketPlayPause === "boolean") {
+      setPlayPause(socketPlayPause);
+    }
+  }, [socketPlayPause]);
 
   // Variables to determine if PREV and NEXT chapters are available
   const currentChapter = chapterList?.find(
@@ -141,16 +153,7 @@ const MediaControlBar = ({ sessionId, sendRotateCall, chapterList }) => {
             handlePlayPause();
           }}
         >
-          {/* Show Play if no next chapter, else toggle between Play/Pause */}
-          {nextChapter ? (
-            playPause ? (
-              <PauseIcon />
-            ) : (
-              <PlayArrowIcon />
-            )
-          ) : (
-            <PlayArrowIcon />
-          )}
+          {playPause ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButtonStyled>
 
         <IconButtonStyled

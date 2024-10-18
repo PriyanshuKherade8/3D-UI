@@ -83,6 +83,7 @@ const StoryMain = () => {
     currItemId,
     currVariant,
     currMessage,
+    playPause,
   } = useSocket(socket);
 
   const selectedItem =
@@ -180,6 +181,7 @@ const StoryMain = () => {
           sendRotateCall={sendRotateCall}
           getData={getData}
           chapterList={chapterList}
+          playPause={playPause}
         />
       </Box>
 

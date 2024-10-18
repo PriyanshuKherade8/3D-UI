@@ -42,7 +42,7 @@ const Drawer = styled.div`
 const DrawerContent = styled.div`
   padding: 6px;
   background: #f4f4f4;
-  border: 1px solid purple;
+  // border: 1px solid purple;
   height: 30vh;
 `;
 
@@ -124,6 +124,7 @@ const StoryBottomDrawer = ({
   sendRotateCall,
   getData,
   chapterList,
+  playPause,
 }) => {
   console.log("insideii", sessionId);
   const [isOpen, setIsOpen] = useState(true);
@@ -213,6 +214,7 @@ const StoryBottomDrawer = ({
                   sessionId={sessionId}
                   sendRotateCall={sendRotateCall}
                   chapterList={chapterList}
+                  playPause={playPause}
                 />
               </Box>
             </ButtonContainer>

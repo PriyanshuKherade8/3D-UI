@@ -64,7 +64,12 @@ const Toolbar = ({
   );
 };
 
-const MediaControlBarComp = ({ sessionId, sendRotateCall, chapterList }) => {
+const MediaControlBarComp = ({
+  sessionId,
+  sendRotateCall,
+  chapterList,
+  playPause,
+}) => {
   return (
     <Box
       sx={{
@@ -80,6 +85,7 @@ const MediaControlBarComp = ({ sessionId, sendRotateCall, chapterList }) => {
         sessionId={sessionId}
         sendRotateCall={sendRotateCall}
         chapterList={chapterList}
+        playPause={playPause}
       />
     </Box>
   );
@@ -115,6 +121,7 @@ const StoryDesktopView = () => {
     currItemId,
     currVariant,
     currMessage,
+    playPause,
   } = useSocket(socket);
   console.log("chapterListbb", chapterList);
 
@@ -185,6 +192,7 @@ const StoryDesktopView = () => {
           sessionId={sessionId}
           sendRotateCall={sendRotateCall}
           chapterList={chapterList}
+          playPause={playPause}
         />
       </Box>
 
