@@ -84,6 +84,7 @@ const StoryMain = () => {
     currVariant,
     currMessage,
     playPause,
+    playPauseToggle,
   } = useSocket(socket);
 
   const selectedItem =
@@ -182,6 +183,7 @@ const StoryMain = () => {
           getData={getData}
           chapterList={chapterList}
           playPause={playPause}
+          playPauseToggle={playPauseToggle}
         />
       </Box>
 

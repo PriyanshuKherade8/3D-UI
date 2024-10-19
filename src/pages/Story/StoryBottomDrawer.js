@@ -125,6 +125,7 @@ const StoryBottomDrawer = ({
   getData,
   chapterList,
   playPause,
+  playPauseToggle,
 }) => {
   console.log("insideii", sessionId);
   const [isOpen, setIsOpen] = useState(true);
@@ -215,6 +216,7 @@ const StoryBottomDrawer = ({
                   sendRotateCall={sendRotateCall}
                   chapterList={chapterList}
                   playPause={playPause}
+                  playPauseToggle={playPauseToggle}
                 />
               </Box>
             </ButtonContainer>
