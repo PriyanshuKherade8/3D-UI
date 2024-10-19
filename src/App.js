@@ -8,6 +8,7 @@ import RenderView from "./pages/Collections/RenderView";
 import StoryMain from "./pages/Story/Mobile-View/StoryMain";
 import Chapters from "./pages/Story/Mobile-View/Components/Chapters";
 import RenderStory from "./pages/Story/RenderStory";
+import ShowCaseMain from "./pages/ShowCase/Mobile-View/Components/ShowCaseMain";
 function App() {
   return (
     <Router>
@@ -17,7 +18,7 @@ function App() {
         <Route path="/view/:id" element={<RenderView />} />
         <Route path="/desktop/:id" element={<RenderView />} />
         <Route path="/story/:id" element={<RenderStory />} />
-        <Route path="/chapter" element={<Chapters />} />
+        <Route path="/showcase" element={<ShowCaseMain />} />
         <Route path="*" element={<>{"Not Found"}</>} />
       </Routes>
     </Router>

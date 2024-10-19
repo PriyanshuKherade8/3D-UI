@@ -69,6 +69,7 @@ const MediaControlBarComp = ({
   sendRotateCall,
   chapterList,
   playPause,
+  playPauseToggle,
 }) => {
   return (
     <Box
@@ -86,6 +87,7 @@ const MediaControlBarComp = ({
         sendRotateCall={sendRotateCall}
         chapterList={chapterList}
         playPause={playPause}
+        playPauseToggle={playPauseToggle}
       />
     </Box>
   );
@@ -122,6 +124,7 @@ const StoryDesktopView = () => {
     currVariant,
     currMessage,
     playPause,
+    playPauseToggle,
   } = useSocket(socket);
   console.log("chapterListbb", chapterList);
 
@@ -193,6 +196,7 @@ const StoryDesktopView = () => {
           sendRotateCall={sendRotateCall}
           chapterList={chapterList}
           playPause={playPause}
+          playPauseToggle={playPauseToggle}
         />
       </Box>
 
