@@ -2,19 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import IframeResizer from "@iframe-resizer/react";
-// import BottomDrawer from "../../../components/BottomDrawer";
-// import AnimatedMenu from "./Components/AnimatedMenu";
-// import useSocket from "../../../hooks/useSocketMessages";
+
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
-import {
-  useGetExperienceDataById,
-  useSetActionCall,
-} from "../../../Collections/services";
+import { useSetActionCall } from "../../../Collections/services";
 import BottomDrawer from "../../../../components/BottomDrawer";
 import AnimatedMenu from "../../../Collections/Mobile-View/Components/AnimatedMenu";
 import useSocket from "../../../../hooks/useSocketMessages";
 import StoryBottomDrawer from "../../../Story/StoryBottomDrawer";
+import ShowCaseBottomDrawer from "./ShowCaseBottomDrawer";
+import { useGetExperienceDataById } from "../../services";
 
 const ShowCaseMain = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -25,24 +22,37 @@ const ShowCaseMain = () => {
   const [iframeHeight, setIframeHeight] = useState("100vh"); // New state for iframe height
   const { id } = useParams();
   const { data } = useGetExperienceDataById(id);
-  const productList = data?.data?.experience?.collection?.items;
+  console.log("data", data);
+  const productList = data?.data?.experience?.products;
   console.log("productList", productList);
 
   const initialCardItems = productList?.map((product) => {
-    console.log("bb", product);
-    const image = product.item_icons.find(
-      (icon) => icon.file_type === "L"
-    )?.path;
     return {
-      image: image || "",
-      title: product.item_display_short_title || "Untitled",
-      long_title: product?.item_display_long_title,
-      product_id: product?.product?.product_id,
-      product: product?.product,
-      item_id: product?.item_id,
-      views: product?.views,
+      product_key: product?.product_key,
+      properties: product.property?.map((property) => {
+        return {
+          property_id: property?.property_id,
+          property_name: property?.property_name,
+          display_name: property?.display_name,
+          property_type: property?.property_type,
+          variants: property?.variants?.map((variant) => {
+            const variantIconM = variant.variant_icons?.find(
+              (icon) => icon.file_type === "M"
+            );
+
+            return {
+              variant_id: variant?.variant_id,
+              variant_name: variant?.variant_name,
+              display_name: variant?.display_name,
+              variant_icon_M: variantIconM ? variantIconM.path : "", // Extract M type icon path
+            };
+          }),
+        };
+      }),
     };
   });
+
+  console.log("ooooo", initialCardItems);
 
   const handleToggleOptions = () => {
     setOptionsOpen((prev) => {
@@ -95,6 +105,7 @@ const ShowCaseMain = () => {
       : []; // Return empty array if initialCardItems is undefined or empty
 
   const viewActionData = selectedItem;
+  console.log("selectedItemshow", selectedItem);
   const collectionActionData = data?.data?.experience?.collection;
 
   useEffect(() => {
@@ -138,7 +149,7 @@ const ShowCaseMain = () => {
           zIndex: 20,
         }}
       >
-        <StoryBottomDrawer
+        <ShowCaseBottomDrawer
           initialCardItems={initialCardItems}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}

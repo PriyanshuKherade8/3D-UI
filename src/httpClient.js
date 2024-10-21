@@ -29,3 +29,10 @@ export const httpClientForIframeForStory = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const httpClientForIframeForShowcase = axios.create({
+  baseURL: "http://143.110.186.134/api/showcase",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
