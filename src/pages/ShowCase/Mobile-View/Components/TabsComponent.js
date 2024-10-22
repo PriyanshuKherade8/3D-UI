@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -25,7 +25,7 @@ const Pagination = styled.div`
   font-weight: 500;
 `;
 
-const TabsComponent = ({ actList, currActId }) => {
+const TabsComponent = ({ actList, interactionId }) => {
   const [value, setValue] = useState(0);
 
   // Sort actList: is_launch_act first, then by display_sequence
@@ -34,6 +34,20 @@ const TabsComponent = ({ actList, currActId }) => {
       b.is_launch_act - a.is_launch_act ||
       a.display_sequence - b.display_sequence
   );
+
+  // Find the act index where the interactionId matches
+  useEffect(() => {
+    if (interactionId) {
+      const actIndex = sortedActList?.findIndex((act) =>
+        act.interactions?.some(
+          (interaction) => interaction.interaction_id === interactionId
+        )
+      );
+      if (actIndex !== -1) {
+        setValue(actIndex);
+      }
+    }
+  }, [interactionId, sortedActList]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

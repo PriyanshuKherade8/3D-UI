@@ -126,6 +126,7 @@ const ShowCaseBottomDrawer = ({
   playPauseToggle,
   actList,
   currActId,
+  interactionId,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [startY, setStartY] = useState(0);
@@ -297,7 +298,11 @@ const ShowCaseBottomDrawer = ({
 
               {isDisplayComponent && (
                 <Box>
-                  <TabsComponent actList={actList} currActId={currActId} />
+                  <TabsComponent
+                    actList={actList}
+                    currActId={currActId}
+                    interactionId={interactionId}
+                  />
                 </Box>
               )}
 

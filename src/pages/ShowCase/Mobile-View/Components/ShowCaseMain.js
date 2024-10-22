@@ -90,6 +90,7 @@ const ShowCaseMain = () => {
     currActId,
     currItemId,
     currVariant,
+    interactionId,
   } = useSocket(socket);
 
   const selectedItem =
@@ -164,6 +165,7 @@ const ShowCaseMain = () => {
           setIframeHeight={setIframeHeight}
           actList={actList}
           currActId={currActId}
+          interactionId={interactionId}
         />
       </Box>
 

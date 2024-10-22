@@ -9,6 +9,7 @@ const useSocket = (socket) => {
   const [currVariant, setCurrVariant] = useState();
   const [playPause, setPlayPause] = useState();
   const [playPauseToggle, setPlayPauseToggle] = useState(false);
+  const [interactionId, SetInteractionId] = useState();
 
   socket.on("message", (data) => {
     console.log("smessage", data);
@@ -35,6 +36,9 @@ const useSocket = (socket) => {
         setPlayPause(data.message.message);
         setPlayPauseToggle((prev) => !prev);
         break;
+      case "interaction_id":
+        SetInteractionId(data.message.message);
+        break;
 
       //   case "is_loaded":
       //     setIsLoadingScreen(false);
@@ -55,6 +59,7 @@ const useSocket = (socket) => {
     currVariant,
     playPause,
     playPauseToggle,
+    interactionId,
   };
 };
 
