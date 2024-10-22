@@ -59,7 +59,6 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
       },
     };
 
-    console.log("Generated viewPayload:", viewPayload);
     changeViewCall(viewPayload);
   };
 

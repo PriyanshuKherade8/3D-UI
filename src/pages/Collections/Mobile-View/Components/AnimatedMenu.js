@@ -54,7 +54,6 @@ const AnimatedMenu = ({
         },
       };
 
-      console.log("payload", payload);
       sendRotateCall(payload);
 
       return newRotateValue;

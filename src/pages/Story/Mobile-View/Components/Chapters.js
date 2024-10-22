@@ -62,7 +62,6 @@ const HorizontalScrollComponent = ({ getData }) => {
   };
 
   const orderedChapters = createChapterSequence(chapterList);
-  console.log("orderedChapters", orderedChapters);
 
   // Placeholder image
   const placeholderImg =

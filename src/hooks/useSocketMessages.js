@@ -11,7 +11,7 @@ const useSocket = (socket) => {
   const [playPauseToggle, setPlayPauseToggle] = useState(false);
 
   socket.on("message", (data) => {
-    console.log("ddd", data);
+    console.log("smessage", data);
     switch (data.message.type) {
       case "curr_product_key":
         setCurrProductKey(data.message.message);

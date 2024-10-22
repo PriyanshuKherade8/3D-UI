@@ -65,7 +65,6 @@ const ConfigureOptions = ({
   selectedItem,
   sessionId,
 }) => {
-  console.log("kkk", selectedItem);
   const [selectedTab, setSelectedTab] = useState(0);
 
   const properties = selectedItem?.product?.property || [];
@@ -76,9 +75,8 @@ const ConfigureOptions = ({
 
   const { mutate: variantChange } = useSetActionCall();
   const productKey = selectedItem?.product?.product_key;
-  console.log("productKey", productKey);
+
   const handleVariantChange = (propertyId, variant) => {
-    console.log("propertyId, variant", propertyId, variant);
     const payload = {
       session_id: sessionId,
       message: {
@@ -249,8 +247,6 @@ const ShowAllProductsOptions = ({ isOptionsOpen, items, onClose }) => (
 );
 
 const Views = ({ viewActionData, sessionId, collectionActionData }) => {
-  console.log("viewActionData", viewActionData, collectionActionData);
-
   const { mutate: changeViewCall } = useSetProductChangeCall();
 
   const handleViewChange = (view) => {
@@ -272,8 +268,6 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
         },
       },
     };
-
-    console.log("Generated viewPayload:", viewPayload);
 
     changeViewCall(viewPayload);
   };
@@ -355,7 +349,6 @@ const MobileDrawerApp = () => {
   const drawerHeight = "20vh";
   const productList = data?.data?.experience?.collection?.items;
   const initialCardItems = productList?.map((product) => {
-    console.log("bb", product);
     const image = product.item_icons.find(
       (icon) => icon.file_type === "L"
     )?.path;
@@ -368,13 +361,10 @@ const MobileDrawerApp = () => {
     };
   });
 
-  console.log("bv", initialCardItems);
-
   const controlId = getData?.experience?.controls?.[0]?.control_id;
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);

@@ -127,12 +127,11 @@ const ShowCaseBottomDrawer = ({
   actList,
   currActId,
 }) => {
-  console.log("isDisplayComponent", isDisplayComponent);
   const [isOpen, setIsOpen] = useState(true);
   const [startY, setStartY] = useState(0);
   const drawerRef = useRef(null);
   const { mutate: changeProductCall } = useSetProductChangeCall();
-  console.log("isShowAll", isShowAll);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";

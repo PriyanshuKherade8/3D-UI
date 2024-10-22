@@ -18,10 +18,8 @@ const MobileMain = () => {
   const { id } = useParams();
   const { data } = useGetExperienceDataById(id);
   const productList = data?.data?.experience?.collection?.items;
-  console.log("productList", productList);
 
   const initialCardItems = productList?.map((product) => {
-    console.log("bb", product);
     const image = product.item_icons.find(
       (icon) => icon.file_type === "L"
     )?.path;
@@ -61,7 +59,6 @@ const MobileMain = () => {
   const sessionId = getData?.sessionID;
 
   const url = `${canvasUrl}?experience=${experienceId}&product=${productKey}&session=${sessionId}`;
-  console.log("Constructed URL:", url);
 
   const [rotate, setRotate] = useState(false);
   const controlId = getData?.experience?.controls?.[0]?.control_id;
@@ -76,7 +73,7 @@ const MobileMain = () => {
     currItemId,
     currVariant,
   } = useSocket(socket);
-  console.log("currVariant", currVariant);
+
   const selectedItem =
     initialCardItems && initialCardItems.length > 0 // Check if initialCardItems exists and is not empty
       ? selectedIndex !== null && selectedIndex < initialCardItems.length
@@ -91,7 +88,6 @@ const MobileMain = () => {
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);

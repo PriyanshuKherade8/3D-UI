@@ -25,7 +25,6 @@ const ShowCaseMain = () => {
 
   const actList = data?.data?.experience?.act_list;
   const productList = data?.data?.experience?.products;
-  console.log("productList", productList);
 
   const initialCardItems = productList?.map((product) => {
     return {
@@ -53,8 +52,6 @@ const ShowCaseMain = () => {
     };
   });
 
-  console.log("ooooo", initialCardItems);
-
   const handleToggleOptions = () => {
     setOptionsOpen((prev) => {
       const newValue = !prev;
@@ -80,7 +77,6 @@ const ShowCaseMain = () => {
   const sessionId = getData?.sessionID;
 
   const url = `${canvasUrl}?experience=${experienceId}&product=${productKey}&session=${sessionId}`;
-  console.log("Constructed URL:", url);
 
   const [rotate, setRotate] = useState(false);
   const controlId = getData?.experience?.controls?.[0]?.control_id;
@@ -106,12 +102,11 @@ const ShowCaseMain = () => {
       : []; // Return empty array if initialCardItems is undefined or empty
 
   const viewActionData = selectedItem;
-  console.log("selectedItemshow", selectedItem);
+
   const collectionActionData = data?.data?.experience?.collection;
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);

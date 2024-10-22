@@ -33,10 +33,8 @@ const Item = styled(Box)(({ theme, isActive }) => ({
 }));
 
 const Chapters = ({ getData }) => {
-  console.log("insidechap", getData);
   const sessionId = getData?.sessionID;
   const chapterList = getData?.experience?.chapter_list || [];
-  console.log("popop", chapterList);
 
   // Function to create a sequential order based on is_first_chapter and previous_chapter
   const createChapterSequence = (chapters) => {
@@ -64,7 +62,6 @@ const Chapters = ({ getData }) => {
   };
 
   const orderedChapters = createChapterSequence(chapterList);
-  console.log("orderedChapters", orderedChapters);
 
   const placeholderImg =
     "https://images.unsplash.com/photo-1727949395650-5315f1c592c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8";

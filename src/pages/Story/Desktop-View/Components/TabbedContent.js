@@ -50,7 +50,6 @@ const TabbedContent = ({
   currVariant,
   chapterList,
 }) => {
-  console.log("matchedChapterD", matchedChapter);
   const [selectedTab, setSelectedTab] = useState("description");
 
   return (

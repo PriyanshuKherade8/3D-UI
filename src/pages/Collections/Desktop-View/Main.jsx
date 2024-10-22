@@ -36,8 +36,6 @@ const Toolbar = ({
   sendRotateCall,
   controlId,
 }) => {
-  console.log("rotate", rotate);
-
   const handleRotate = () => {
     setRotate((prev) => {
       const newRotateValue = !prev;
@@ -50,7 +48,6 @@ const Toolbar = ({
         },
       };
 
-      console.log("payload", payload);
       sendRotateCall(payload);
 
       return newRotateValue;
@@ -101,8 +98,6 @@ const Toolbar = ({
 };
 
 const Views = ({ viewActionData, sessionId, collectionActionData }) => {
-  console.log("viewActionData", viewActionData, collectionActionData);
-
   const { mutate: changeViewCall } = useSetProductChangeCall();
 
   const handleViewChange = (view) => {
@@ -124,8 +119,6 @@ const Views = ({ viewActionData, sessionId, collectionActionData }) => {
         },
       },
     };
-
-    console.log("Generated viewPayload:", viewPayload);
 
     changeViewCall(viewPayload);
   };
@@ -239,15 +232,13 @@ const Main = () => {
   };
   const { id } = useParams();
   const { data } = useGetExperienceDataById(id);
-  console.log("allData", data?.data);
+
   const viewActionData = data?.data?.experience?.collection?.items?.[0]?.views;
   const collectionActionData = data?.data?.experience?.collection;
 
   const productList = data?.data?.experience?.collection?.items;
-  console.log("productList", productList);
 
   const initialCardItems = productList?.map((product) => {
-    console.log("bb", product);
     const image = product.item_icons.find(
       (icon) => icon.file_type === "L"
     )?.path;
@@ -261,8 +252,6 @@ const Main = () => {
     };
   });
 
-  console.log("initialCardItems", initialCardItems);
-
   const getData = data?.data;
 
   const experienceId = getData?.experience?.experience_id;
@@ -272,10 +261,10 @@ const Main = () => {
   const isTablet = useMediaQuery("(max-width:960px)");
   const canvasUrl = "http://64.227.170.212";
   const url = `${canvasUrl}?experience=${experienceId}+&product=${productKey}+&session=${sessionId}`;
-  console.log("url", url);
+
   const URL = "http://143.110.186.134";
   const socket = io(URL, { autoConnect: false });
-  console.log("socket", socket);
+
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const { currProductKey, chapterList, currPlayMode, currActId, currItemId } =
     useSocket(socket);
@@ -287,7 +276,6 @@ const Main = () => {
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);
@@ -302,8 +290,6 @@ const Main = () => {
         ? [initialCardItems.find((item) => item.item_id === currItemId)] // Use item found by currItemId
         : [initialCardItems[0]] // Fallback to the first item if no selection
       : []; // Return empty array if initialCardItems is undefined or empty
-
-  console.log("selectedItem", selectedItem);
 
   const payloadForItemChange = {
     session_id: sessionId,

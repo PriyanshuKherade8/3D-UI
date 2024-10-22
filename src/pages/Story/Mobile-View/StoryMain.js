@@ -25,10 +25,8 @@ const StoryMain = () => {
   const chapterListFromApi = data?.data?.experience?.chapter_list;
 
   const productList = data?.data?.experience?.collection?.items;
-  console.log("productList", productList);
 
   const initialCardItems = productList?.map((product) => {
-    console.log("bb", product);
     const image = product.item_icons.find(
       (icon) => icon.file_type === "L"
     )?.path;
@@ -68,7 +66,6 @@ const StoryMain = () => {
   const sessionId = getData?.sessionID;
 
   const url = `${canvasUrl}?experience=${experienceId}&product=${productKey}&session=${sessionId}`;
-  console.log("Constructed URL:", url);
 
   const [rotate, setRotate] = useState(false);
   const controlId = getData?.experience?.controls?.[0]?.control_id;
@@ -100,7 +97,7 @@ const StoryMain = () => {
   const collectionActionData = data?.data?.experience?.collection;
 
   const [matchedChapter, setMatchedChapter] = useState(null);
-  console.log("matchedChapter", matchedChapter);
+
   useEffect(() => {
     // Function to match chapter_id
     const matchChapter = () => {
@@ -122,7 +119,6 @@ const StoryMain = () => {
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);

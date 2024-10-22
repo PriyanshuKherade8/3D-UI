@@ -113,7 +113,6 @@ const ConfigureOptions = ({
           <Box>
             <ScrollableContainer>
               {properties[selectedTab].variants.map((variant) => {
-                console.log("variantgg", variant?.variant_icon_M);
                 const variantIcon = variant?.variant_icon_M;
 
                 return (

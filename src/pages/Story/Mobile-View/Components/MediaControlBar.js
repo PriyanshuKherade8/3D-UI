@@ -38,23 +38,13 @@ const MediaControlBar = ({
   playPause: socketPlayPause,
   playPauseToggle,
 }) => {
-  console.log("playPauseToggle", playPauseToggle);
   const [clickedIcon, setClickedIcon] = useState(null);
   const [replay, setReplay] = useState(false);
   const [playPause, setPlayPause] = useState(true); // Local playPause state
 
   // Sync initial state with socketPlayPause value
   useEffect(() => {
-    console.log(
-      "vvvv",
-      playPause,
-      "socketPlayPause",
-      socketPlayPause,
-      "playPauseToggle",
-      playPauseToggle
-    );
     if (typeof socketPlayPause === "boolean") {
-      console.log("playpause", playPause, "socketPlayPause", socketPlayPause);
       setPlayPause(socketPlayPause);
     }
   }, [playPauseToggle]);

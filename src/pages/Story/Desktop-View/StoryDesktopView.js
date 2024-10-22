@@ -126,13 +126,12 @@ const StoryDesktopView = () => {
     playPause,
     playPauseToggle,
   } = useSocket(socket);
-  console.log("chapterListbb", chapterList);
 
   const chapterListFromApi = data?.data?.experience?.chapter_list;
   const getData = data?.data;
 
   const [matchedChapter, setMatchedChapter] = useState(null);
-  console.log("gg", matchedChapter);
+
   useEffect(() => {
     // Function to match chapter_id
     const matchChapter = () => {
@@ -167,7 +166,6 @@ const StoryDesktopView = () => {
 
   useEffect(() => {
     if (!isSocketConnected && sessionId) {
-      console.log("sessionId on canvas", sessionId);
       socket.auth = { sessionId };
       socket.connect();
       setIsSocketConnected(true);
