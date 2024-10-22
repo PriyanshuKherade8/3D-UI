@@ -22,7 +22,8 @@ const ShowCaseMain = () => {
   const [iframeHeight, setIframeHeight] = useState("100vh"); // New state for iframe height
   const { id } = useParams();
   const { data } = useGetExperienceDataById(id);
-  console.log("data", data);
+
+  const actList = data?.data?.experience?.act_list;
   const productList = data?.data?.experience?.products;
   console.log("productList", productList);
 
@@ -94,7 +95,7 @@ const ShowCaseMain = () => {
     currItemId,
     currVariant,
   } = useSocket(socket);
-  console.log("currVariant", currVariant);
+
   const selectedItem =
     initialCardItems && initialCardItems.length > 0 // Check if initialCardItems exists and is not empty
       ? selectedIndex !== null && selectedIndex < initialCardItems.length
@@ -166,6 +167,8 @@ const ShowCaseMain = () => {
           viewActionData={viewActionData}
           currVariant={currVariant}
           setIframeHeight={setIframeHeight}
+          actList={actList}
+          currActId={currActId}
         />
       </Box>
 

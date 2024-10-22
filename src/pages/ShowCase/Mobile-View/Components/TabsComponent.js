@@ -25,8 +25,15 @@ const Pagination = styled.div`
   font-weight: 500;
 `;
 
-const TabsComponent = () => {
+const TabsComponent = ({ actList, currActId }) => {
   const [value, setValue] = useState(0);
+
+  // Sort actList: is_launch_act first, then by display_sequence
+  const sortedActList = actList?.sort(
+    (a, b) =>
+      b.is_launch_act - a.is_launch_act ||
+      a.display_sequence - b.display_sequence
+  );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -39,17 +46,10 @@ const TabsComponent = () => {
   };
 
   const handleNext = () => {
-    if (value < tabData.length - 1) {
+    if (value < sortedActList.length - 1) {
       setValue((prevValue) => prevValue + 1);
     }
   };
-
-  const tabData = [
-    { label: "Actname 1", description: "Lorem Ipsum Lorem Ipsum Lorem Ipsum" },
-    { label: "Actname 2", description: "IpsumLorem IpsumLorem IpsumLorem" },
-    { label: "Actname 3", description: "Lorem Ipsum Lorem Ipsum Lorem Ipsum" },
-    { label: "Actname 4", description: "IpsumLorem IpsumLorem IpsumLorem" },
-  ];
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -62,13 +62,13 @@ const TabsComponent = () => {
         scrollButtons="auto"
         TabIndicatorProps={{ style: { backgroundColor: "#1976d2" } }}
       >
-        {tabData.map((tab, index) => (
-          <Tab key={index} label={tab.label} />
+        {sortedActList?.map((act, index) => (
+          <Tab key={index} label={act.act_title} />
         ))}
       </Tabs>
 
       {/* Tab Content with Navigation */}
-      {tabData.map((tab, index) => (
+      {sortedActList?.map((act, index) => (
         <div
           key={index}
           role="tabpanel"
@@ -80,7 +80,7 @@ const TabsComponent = () => {
             <StyledTabPanel>
               <NavContainer>
                 <Typography variant="h6">
-                  Handle {index + 1}/{tabData.length}
+                  Handle {index + 1}/{sortedActList.length}
                 </Typography>
                 <div>
                   <IconButton onClick={handlePrev} disabled={value === 0}>
@@ -88,13 +88,13 @@ const TabsComponent = () => {
                   </IconButton>
                   <IconButton
                     onClick={handleNext}
-                    disabled={value === tabData.length - 1}
+                    disabled={value === sortedActList.length - 1}
                   >
                     <ArrowForwardIosIcon />
                   </IconButton>
                 </div>
               </NavContainer>
-              <Typography>{tab.description}</Typography>
+              <Typography>{act.act_text}</Typography>
             </StyledTabPanel>
           )}
         </div>

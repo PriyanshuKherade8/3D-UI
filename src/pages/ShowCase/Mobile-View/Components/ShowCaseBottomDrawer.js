@@ -124,6 +124,8 @@ const ShowCaseBottomDrawer = ({
   chapterList,
   playPause,
   playPauseToggle,
+  actList,
+  currActId,
 }) => {
   console.log("isDisplayComponent", isDisplayComponent);
   const [isOpen, setIsOpen] = useState(true);
@@ -296,7 +298,7 @@ const ShowCaseBottomDrawer = ({
 
               {isDisplayComponent && (
                 <Box>
-                  <TabsComponent />
+                  <TabsComponent actList={actList} currActId={currActId} />
                 </Box>
               )}
 
